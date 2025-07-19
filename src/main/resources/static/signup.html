@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inner Voice | Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="tabicon.png">
+    <style>
+      @keyframes fadeInBlur {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+body {
+  animation: fadeInBlur 3s ease forwards;
+}
+        .wave {
+  background: url('wave.svg') repeat-x;
+  background-size: cover;
+  opacity: 0.5;
+}
+
+.wave1 {
+  animation: waveMove1 2s linear infinite;
+}
+.wave2 {
+  animation: waveMove2 4s linear infinite reverse;
+  opacity: 0.3;
+}
+@keyframes waveMove1 {
+  from { background-position-x: 0; }
+  to   { background-position-x: 1000px; }
+}
+
+@keyframes waveMove2 {
+  from { background-position-x: 0; }
+  to   { background-position-x: -1000px; }
+}
+    </style>
+</head>
+<body class="bg-black text-red-500 font-sans">
+<div class="bg-gray-900 p-[1%] flex justify-between">
+    <img src="Inner Voice Logo.png" alt="logo" class="w-40 rounded-full py-1">
+    <a href="index.html" class="py-1">
+        <button class="bg-black text-red-500 border-2 border-red-500 px-6 py-2 rounded-xl hover:bg-red-500 hover:text-black transition">
+            Home
+        </button>
+    </a>
+</div>
+    <center>
+        <div class=" text-red-500 p-8 mt-20 w-[70%] flex flex-col items-center space-y-5 ">
+            <h1 class="font-bold text-white text-4xl">Sign Up</h1>
+            <form id="SignUpForm" action="/login" method="POST" class="w-[50%] flex flex-col font-bold text-black space-y-10 items-center bg-gray-900 lg:p-[5%] p-[10%] rounded-2xl ">
+                <div class="flex space-x-4 text-white justify-between w-[100%]">
+                    <label for="name" class="text-2xl">FullName:</label>
+                    <input type="text" id="name" name="name" required class="bg-white rounded-xl text-red-500 p-[2%] border-2 border-black">
+                </div>
+                <div class="flex space-x-4 text-white justify-between w-[100%]">
+                    <label for="email" class="text-2xl">Email Id:</label>
+                    <input type="text" id="email" name="email" required class="bg-white rounded-xl text-red-500 p-[2%] border-2 border-black">
+                </div>
+                <div class="flex space-x-2 text-white justify-between w-[100%]">
+                    <label for="username" class="text-2xl">Username:</label>
+                    <input type="text" id="username" name="username" required class="bg-white rounded-xl text-red-500 p-[2%] border-2 border-black">
+                </div>
+                <div class="flex space-x-4 text-white justify-between w-[100%]">
+                    <label for="password" class="text-2xl">Password:</label>
+                    <input type="password" id="password" name="password" required class="bg-white rounded-xl text-red-500 p-[2%] border-2 border-black">
+                </div>
+                <button type="submit" class="bg-black border-2 border-red-700 text-white font-bold text-xl p-[2%] w-[40%] rounded-2xl hover:bg-red-600 hover:border-2 hover:border-black hover:text-black">Sign Up</button>
+            </form>
+            <div class="flex items-center space-x-1 justify-between lg:w-[40%] w-[140%]">
+            <p class="text-white">Already have an account.</p>
+            <a href="login.html">
+            <button class="border-2 rounded-xl  border-red-500 px-2 py-1 hover:text-black hover:bg-red-500 hover:font-bold">Login</button>
+            </a>
+            </div>
+        </div>
+    </center>
+              <div class="wave-container relative h-[100px] overflow-hidden lg:mt-[5%] mt-[62%]">
+  <div class="absolute top-0 left-0 right-0 bottom-0 wave wave1"></div>
+  <div class="absolute top-0 left-0 right-0 bottom-0 wave wave2"></div>
+</div>
+
+<footer class="bg-black text-red-500 py-6 px-4 mt-8">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+    <div class="text-center md:text-left">
+      <p class="font-semibold">© 2025 Inner Voice. All rights reserved.</p>
+    </div>
+    <div class="flex space-x-4">
+      <a href="AboutUs.html" class="hover:text-red-400 transition">About Us</a>
+      <a href="Contact.html" class="hover:text-red-400 transition">Contact</a>
+      <a href="privacy.html" class="hover:text-red-400 transition">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+    document.getElementById('SignUpForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // prevent default form action
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const email = document.getElementById('email').value;
+    const name = document.getElementById('name').value;
+
+    try {
+      const response = await fetch('http://localhost:8080/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userName: username,
+          userCategory: "FREE_USER",
+          password: password,
+          emailId: email,
+          name: name
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const userId = data.userId;
+        window.location.href = `home1.html?userId=${userId}`;
+      } else {
+        const errorMsg = await response.text(); // get backend message
+        alert('SignUp Failed: ' + errorMsg);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred.');
+    }
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-red-500 font-sans min-h-screen">
+<header class="bg-gray-900 flex justify-between items-center p-4 shadow-md">
+  <img src="Inner Voice Logo.png" alt="logo" class="w-40 rounded-full">
+
+  <button onclick="history.back()" class="bg-black text-red-500 border-2 border-red-500 px-6 py-2 rounded-xl hover:bg-red-500 hover:text-black transition">
+    Back
+  </button>
+
+</header>
+
+<center>
+<div class="bg-gray-900/80 flex flex-col items-center justify-center p-6 mt-[10%] rounded-2xl shadow-lg w-80 text-center space-y-4">
+  <img id="image" alt="Book Cover" class="w-40 h-40 mx-auto object-cover rounded-lg shadow-md">
+
+  <h1 id="bookTitle" class="text-2xl font-bold"></h1>
+
+  <div class="space-y-4 w-[90%]">
+    <div class="flex justify-center">
+      <button id="playButton" onclick="toggleAudio()"
+              class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 text-white text-2xl flex items-center justify-center shadow-lg hover:shadow-red-500 transition duration-300 ease-in-out">
+        <svg id="icon" xmlns="http://www.w3.org/2000/svg" fill="none" class="w-6 h-6" viewBox="0 0 24 24" stroke="currentColor">
+          <path id="iconPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 3v18l15-9L5 3z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="relative h-2 bg-gray-700 rounded overflow-hidden cursor-pointer w-full" id="seekBar">
+      <div id="progressBar" class="absolute top-0 left-0 h-2 bg-red-500 w-0"></div>
+    </div>
+
+    <div class="flex justify-between text-xs text-gray-400">
+      <span id="currentTime">0:00</span>
+      <span id="duration">0:00</span>
+    </div>
+  </div>
+
+</div>
+</center>
+<audio id="audio" src="dummy.mp3"></audio>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const params = new URLSearchParams(window.location.search);
+    const bookId = params.get('bookId');
+
+    try {
+      const response = await fetch(`http://localhost:8080/books/getting/${bookId}`, {
+        method: "GET", // Change to POST only if your backend expects it
+      });
+
+      if (response.ok) {
+        const book = await response.json();
+        const name = document.getElementById('bookTitle');
+        const image= document.getElementById('image');
+        name.textContent = book.bookName; // Fixed extra closing brace
+        image.src=book.imageLink;
+      } else {
+        console.error("Failed to fetch book data:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching book details:", error);
+    }
+  });
+
+  const audio = document.getElementById('audio');
+  const playButton = document.getElementById('playButton');
+  const progressBar = document.getElementById('progressBar');
+  const currentTimeSpan = document.getElementById('currentTime');
+  const durationSpan = document.getElementById('duration');
+
+function toggleAudio() {
+  const iconPath = document.getElementById('iconPath');
+
+  if (audio.paused) {
+    audio.play();
+    iconPath.setAttribute("d", "M10 9v6m4-6v6"); // Pause icon
+  } else {
+    audio.pause();
+    iconPath.setAttribute("d", "M5 3v18l15-9L5 3z"); // Play icon
+  }
+}
+
+  audio.addEventListener('loadedmetadata', () => {
+    durationSpan.textContent = formatTime(audio.duration);
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    const progress = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = progress + '%';
+    currentTimeSpan.textContent = formatTime(audio.currentTime);
+
+    const seekBar = document.getElementById('seekBar');
+seekBar.addEventListener('click', function (e) {
+  const rect = seekBar.getBoundingClientRect();
+  const offsetX = e.clientX - rect.left;
+  const width = rect.width;
+  const percent = offsetX / width;
+  audio.currentTime = percent * audio.duration;
+});
+  });
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+</script>
+
+</body>
+</html>

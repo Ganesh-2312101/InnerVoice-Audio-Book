@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INNER VOICE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="tabicon.png">
+  <style>
+    /* @keyframes scrollBooks {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .scrolling-wrapper {
+      animation: scrollBooks 25s linear infinite;
+    } */
+    /* .scrolling-wrapper:hover {
+      animation-play-state: paused;
+    } */
+@keyframes fadeInBlur {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+body {
+  animation: fadeInBlur 3s ease forwards;
+}
+.wave {
+  background: url('wave.svg') repeat-x;
+  background-size: cover;
+  opacity: 0.5;
+}
+
+.wave1 {
+  animation: waveMove1 2s linear infinite;
+}
+.wave2 {
+  animation: waveMove2 4s linear infinite reverse;
+  opacity: 0.3;
+}
+@keyframes waveMove1 {
+  from { background-position-x: 0; }
+  to   { background-position-x: 1000px; }
+}
+
+@keyframes waveMove2 {
+  from { background-position-x: 0; }
+  to   { background-position-x: -1000px; }
+}
+  </style>
+</head>
+<body class="bg-black text-red-500 font-sans">
+
+  <div class="bg-gray-900 flex justify-between items-center p-4 shadow-md">
+    <img src="Inner Voice Logo.png" alt="logo" class="w-40 rounded-full">
+    <a href="login.html">
+    <button class="bg-black text-red-500 border-2 border-red-500 px-6 py-2 rounded-xl hover:bg-red-500 hover:text-black transition">
+      Log In
+    </button>
+    
+    </a>
+    
+  </div>
+
+  <center>
+    <section class="bg-[url(/bgimage.jpg)] relative flex-col items-center justify-center space-y-[5%] mt-20 text-center py-20 px-4 lg:py-12 min-h-screen  w-full">
+      <div class="text-gray-200 mb-10">
+        <h1 class="text-6xl font-bold lg:mb-4 mb-10">Inner Voice</h1>
+        <p class="text-xl">Your gateway to a world of knowledge and inspiration.</p>
+      <!-- <h1 class="text-4xl font-bold mb-2">Turn your time into progress — listen, learn, and grow with top productivity audiobooks.</h1>
+      <p class="text-lg italic">Empower your mind, one book at a time.</p> -->
+      </div>
+      <div class="flex flex-col items-center space-y-20 lg:space-y-5 w-full">
+        <p class="text-gray-200 text-lg">Don't have an account? Create one..</p>
+        <a href="signup.html" class="text-3xl font-bold w-[60%] lg:w-[30%] mt-[10%] lg:mx-auto pt-[5%] text-white bg-red-600 text-black px-2 py-3 lg:px-2 lg:py-3 rounded-xl hover:bg-red-700 transition">
+        <button>Get Started</button>
+        </a>
+      </div>
+      <div>
+
+      </div>
+    </section>
+  </center>
+          <div class="wave-container relative h-[100px] overflow-hidden">
+  <div class="absolute top-0 left-0 right-0 bottom-0 wave wave1"></div>
+  <div class="absolute top-0 left-0 right-0 bottom-0 wave wave2"></div>
+</div>
+
+</div>
+
+
+<div id="carousel" class="relative flex flex-col text-[2rem] text-center py-20 font-bold gap-[2rem] justify-between overflow-hidden min-h-screen w-full max-w-[80%] h-[20rem] mx-auto">
+ <h1>More of your Favorite Books</h1>
+  <div id="slides" class="sm:flex hidden transition-transform duration-700 ease-in-out">
+    <!-- Slide 1 -->
+    <div class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+      <img src="book1.webp" class="w-[15rem] rounded-xl shadow-md">
+      <img src="book2.jpg" class="w-[15rem] rounded-xl shadow-md">
+      <img src="book3.jpg" class="w-[15rem] rounded-xl shadow-md">
+      <img src="book4.jpg" class="w-[15rem] rounded-xl shadow-md">
+    </div>
+    <!-- Slide 2 -->
+    <div class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+      <img src="book5.jpg" class="w-[15rem] rounded-xl shadow-md">
+      <img src="book6.png" class="w-[15rem] rounded-xl shadow-md">
+          <img src="book7.jpg" class="w-[15rem] rounded-xl shadow-md">
+      <img src="book8.jpg" class="w-[15rem] rounded-xl shadow-md">
+    </div>
+  </div>
+  <div id="mobileslides" class="flex sm:hidden transition-transform duration-700 ease-in-out">
+  <!-- mobile version: one book per div -->
+  <div class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+    <img src="book1.webp" class="rounded-xl shadow-md w-full">
+  </div>
+  <div class="flex-shrink-0 w-full snap-center">
+    <img src="book2.jpg" class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+  </div>
+  <div class="flex-shrink-0 w-full snap-center">
+    <img src="book3.jpg" class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+  </div>
+    <div class="flex-shrink-0 w-full snap-center">
+    <img src="book4.jpg" class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+  </div>
+    <div class="flex-shrink-0 w-full snap-center">
+    <img src="book5.jpg" class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+  </div>
+    <div class="flex-shrink-0 w-full snap-center">
+    <img src="book6.png" class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+  </div>
+    <div class="flex-shrink-0 w-full snap-center">
+    <img src="book7.jpg" class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+  </div>
+    <div class="flex-shrink-0 w-full snap-center">
+    <img src="book8.jpg" class="flex min-w-full justify-around border-2 bg-red-700 border-red-700 rounded-xl shadow-lg p-4">
+  </div>
+  <!-- add more -->
+</div>
+</div>
+  <div class="wave-container relative h-[100px] overflow-hidden">
+  <div class="absolute top-0 left-0 right-0 bottom-0 wave wave1"></div>
+  <div class="absolute top-0 left-0 right-0 bottom-0 wave wave2"></div>
+</div>
+  <section class="bg-gray-900/80 py-12 px-6 md:px-20 rounded-3xl shadow-md my-10 backdrop-blur-md">
+    <h2 class="text-3xl font-bold text-center text-red-500 mb-10">Why Choose InnerVoice?</h2>
+
+    <div class="mb-10">
+      <h3 class="text-2xl font-semibold mb-4 text-red-400">Service Overview</h3>
+      <ul class="list-disc list-inside text-lg space-y-2 text-red-300">
+        <li>Try our 3 book 30-day free trial, only ₹149/month afterwards</li>
+        <li>Get any 2 books, plus a bonus VIP book in your free trial</li>
+        <li>500,000+ best sellers, new releases, and classic favorites</li>
+        <li>Access 10,000+ free audiobooks</li>
+        <li>Cancel anytime during your free trial, no strings attached</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-2xl font-semibold mb-4 text-red-400">Listen Anywhere</h3>
+      <ul class="list-disc list-inside text-lg space-y-2 text-red-300">
+        <li>Take audiobooks anywhere on your smartphone, tablet, or laptop</li>
+        <li>Switch seamlessly between devices without losing your place</li>
+        <li>Download audiobooks for offline listening or stream instantly over WIFI or 4G</li>
+        <li>Choice of wifi-only mode to save consumption on your data plan</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="text-center bg-gray-800 py-8 px-4 rounded-2xl mx-4 mb-6 shadow-inner">
+    <h2 class="text-2xl font-bold mb-4 text-red-500">Choose Your Plan</h2>
+    <div class="flex justify-center gap-6 flex-wrap">
+
+      <!-- Monthly Plan -->
+      <div class="bg-black border-2 border-red-500 p-6 rounded-xl shadow-md w-64 transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-red-500 hover:text-black cursor-pointer">
+        <h3 class="text-xl font-semibold mb-2">Monthly</h3>
+        <p class="text-2xl font-bold">₹149</p>
+      </div>
+
+      <!-- Yearly Plan -->
+      <div class="bg-black border-2 border-red-500 p-6 rounded-xl shadow-md w-64 transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-red-500 hover:text-black cursor-pointer">
+        <h3 class="text-xl font-semibold mb-2">Yearly</h3>
+        <p class="text-2xl font-bold">₹1499</p>
+      </div>
+
+    </div>
+  </section>
+
+<footer class="bg-black text-red-500 py-6 px-4 mt-8">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+    <div class="text-center md:text-left">
+      <p class="font-semibold">© 2025 Inner Voice. All rights reserved.</p>
+    </div>
+    <div class="flex space-x-4">
+      <a href="AboutUs.html" class="hover:text-red-400 transition">About Us</a>
+      <a href="Contact.html" class="hover:text-red-400 transition">Contact</a>
+      <a href="privacy.html" class="hover:text-red-400 transition">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  let currentSlide = 0;
+const slides = document.getElementById('slides');
+const totalSlides = 2; // Number of slide groups
+
+setInterval(() => {
+  currentSlide = (currentSlide + 1) % totalSlides;
+  slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+}, 3000);
+
+  let currentSlide1 = 0;
+const slides1 = document.getElementById('mobileslides');
+const totalSlides1 = 8; // Number of slide groups
+
+setInterval(() => {
+  currentSlide1 = (currentSlide1 + 1) % totalSlides1;
+  slides1.style.transform = `translateX(-${currentSlide1 * 100}%)`;
+}, 3000);
+</script>
+
+</body>
+</html>

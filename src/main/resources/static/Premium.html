@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upgrade Premium</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="tabicon.png">
+  <style>
+    @keyframes fadeInBlur {
+      from {
+        opacity: 0;
+        filter: blur(4px);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+    body {
+      animation: fadeInBlur 3s ease forwards;
+    }
+  </style>
+</head>
+<body class="bg-black text-red-500 font-sans">
+  <div class="bg-gray-900 p-4 flex justify-between items-center">
+    <img src="Inner Voice Logo.png" alt="logo" class="w-40 rounded-full">
+    <a href="index.html">
+      <button class="bg-black text-red-500 border-2 border-red-500 px-6 py-2 rounded-xl hover:bg-red-500 hover:text-black transition">
+        Home
+      </button>
+    </a>
+  </div>
+
+  <h1 class="text-4xl font-bold text-center mt-12">Go Premium</h1>
+  <p class="text-center mt-2 text-gray-400">Choose the plan that fits you best</p>
+
+  <div class="flex flex-col md:flex-row justify-center items-center gap-8 mt-12 px-4">
+    <div class="bg-gray-900 rounded-2xl p-6 w-72 text-center shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Monthly Plan</h2>
+      <p class="text-gray-400 mb-6">Enjoy all premium features for one month</p>
+      <p class="text-3xl font-bold mb-6">₹149</p>
+
+        <button onclick="UpgradePremium('MONTHLY')" class="border-2 border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-black transition">
+          Subscribe
+        </button>
+
+    </div>
+
+    <div class="bg-gray-900 rounded-2xl p-6 w-72 text-center shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Yearly Plan</h2>
+      <p class="text-gray-400 mb-6">Save more with an annual subscription</p>
+      <p class="text-3xl font-bold mb-6">₹1499</p>
+        <button onclick="UpgradePremium('YEARLY')" class="border-2 border-red-500 text-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-black transition">
+          Subscribe
+        </button>
+       </div>
+  </div>
+
+  <footer class="bg-black text-red-500 py-6 px-4 mt-[10%]">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+      <div class="text-center md:text-left">
+        <p class="font-semibold">© 2025 Inner Voice. All rights reserved.</p>
+      </div>
+      <div class="flex space-x-4">
+        <a href="AboutUs.html" class="hover:text-red-400 transition">About Us</a>
+        <a href="Contact.html" class="hover:text-red-400 transition">Contact</a>
+        <a href="privacy.html" class="hover:text-red-400 transition">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    async function UpgradePremium(plan){
+      const params= new URLSearchParams(window.location.search);
+      const id = params.get('userId');
+      const response=await fetch(`http://localhost:8080/users/upgrade/${id}?plan=${plan}`,{
+        method : 'PUT'
+      });
+      if(response.ok){
+        alert(`Successfully upgraded user ${id} to ${plan} plan!`);
+        window.location.href = `Profile.html?userId=${id}`;
+      } else {
+        alert('Failed to upgrade. Please try again later.');
+      }
+    }
+  </script>
+</body>
+</html>

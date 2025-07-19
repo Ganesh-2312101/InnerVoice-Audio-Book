@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="tabicon.png">
+</head>
+<body class="text-red-500 bg-black font-sans">
+    <div class="bg-gray-900 p-[1%]">
+        <img src="Inner Voice Logo.png" alt="logo" class="w-40 rounded-full py-1">
+    </div>
+    <div id="ProfileInfo" class="mt-8">
+        <!-- Profile content will be injected here -->
+    </div>
+
+    <footer class="bg-black text-red-500 py-6 px-4 mt-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="text-center md:text-left">
+                <p class="font-semibold">© 2025 Inner Voice. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="AboutUs.html" class="hover:text-red-400 transition">About Us</a>
+                <a href="Contact.html" class="hover:text-red-400 transition">Contact</a>
+                <a href="privacy.html" class="hover:text-red-400 transition">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        async function display(){
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get('userId');
+
+            const response = await fetch(`http://localhost:8080/users/${userId}`);
+
+            if(response.ok){
+                const user = await response.json();
+
+                let premiumSection = '';
+
+            if(user.userCategory === 'PREMIUM_USER' && user.premiumPlan){
+                // call backend to get days left
+                const daysLeftResponse = await fetch(`http://localhost:8080/users/premium-days-left/${userId}`);
+                let daysLeftText = '';
+                if(daysLeftResponse.ok){
+                    daysLeftText = await daysLeftResponse.text();
+                } else {
+                    daysLeftText = 'Could not fetch premium validity.';
+                }
+
+                premiumSection = `
+                    <p class="text-lg"><span class="font-medium text-gray-300">Premium Plan:</span> ${user.premiumPlan}</p>
+                    <p class="text-lg"><span class="font-medium text-gray-300">Status:</span> ${daysLeftText}</p>
+                `;
+            }
+
+                document.getElementById('ProfileInfo').innerHTML = ` <center>
+                    <div class="bg-gray-800/70 p-8 rounded-2xl shadow-lg flex flex-col items-center space-y-6 w-[40%] mt-[5%]">
+                        <img src="https://api.dicebear.com/6.x/initials/svg?seed=${user.userName}" alt="avatar" class="w-28 h-28 rounded-full border-4 border-[#0CF574] shadow-md">
+                        <h2 class="text-3xl font-semibold text-[#0CF574]">${user.userName}</h2>
+                        <div class="space-y-2 text-center">
+                            <p class="text-lg"><span class="font-medium text-gray-300">Full Name:</span> ${user.name}</p>
+                            <p class="text-lg"><span class="font-medium text-gray-300">Email:</span> ${user.emailId}</p>
+                            <p class="text-lg"><span class="font-medium text-gray-300">User Category:</span> ${user.userCategory}</p>
+                            ${premiumSection}
+                        </div>
+                    </div> </center>`;
+            } else {
+                document.getElementById('ProfileInfo').innerHTML = `
+                    <div class="bg-red-700/30 p-6 rounded-xl text-center text-white">
+                        <p>Failed to load profile. Please try again later.</p>
+                    </div>`;
+            }
+        }
+        display();
+    </script>
+</body>
+</html>
