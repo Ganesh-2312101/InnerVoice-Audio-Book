@@ -6,43 +6,7 @@
     <title>Inner Voice | Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/png" href="tabicon.png">
-    <style>
-      @keyframes fadeInBlur {
-  from {
-    opacity: 0;
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-body {
-  animation: fadeInBlur 3s ease forwards;
-}
-        .wave {
-  background: url('wave.svg') repeat-x;
-  background-size: cover;
-  opacity: 0.5;
-}
-
-.wave1 {
-  animation: waveMove1 2s linear infinite;
-}
-.wave2 {
-  animation: waveMove2 4s linear infinite reverse;
-  opacity: 0.3;
-}
-@keyframes waveMove1 {
-  from { background-position-x: 0; }
-  to   { background-position-x: 1000px; }
-}
-
-@keyframes waveMove2 {
-  from { background-position-x: 0; }
-  to   { background-position-x: -1000px; }
-}
-    </style>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body class="bg-black text-red-500 font-sans">
     <div class="bg-gray-900 p-[1%] flex justify-between">
@@ -93,31 +57,7 @@ body {
   </div>
 </footer>
 
-<script>
-  document.getElementById('LoginForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const userName= document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-     try{
-      const response= await fetch(`http://localhost:8080/users/login?name=${userName}&password=${password}`, {
-        method: 'POST',
-      })
-      if(response.ok){
-        const data = await response.json();
-        const userId = data.userId;
-        window.location.href = `home1.html?userId=${userId}`;
-      }
-      else {
-        const errorData = await response.text();
-        console.error('Error:', errorData);
-        alert('Login failed. Incorrect password.');
-      }
-     }
-     catch(error){
-        console.error('Error:', error);
-        alert('Invalid User Name');
-     }
-  });
+<script src="login.js">
 </script>
 </body>
 </html>

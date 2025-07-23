@@ -1,6 +1,8 @@
 package com.InnerVoice.InnerVoiceProject.Controller;
 
 import com.InnerVoice.InnerVoiceProject.Model.*;
+import com.InnerVoice.InnerVoiceProject.Repositories.BookRepository;
+import com.InnerVoice.InnerVoiceProject.Repositories.UserActivityRepository;
 import com.InnerVoice.InnerVoiceProject.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,10 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
-
+    @Autowired
+    private UserActivityRepository userActivityRepository;
+    @Autowired
+    private BookRepository bookRepository;
     @PostMapping
     public void addBook(@RequestBody Book book)
     {
@@ -71,4 +76,54 @@ public class BookController {
     {
         bookService.deleteAllBooks();
     }
+
+    @GetMapping("/recommendations/{userId}")
+    public ResponseEntity<List<Book>> getRecommendations(@PathVariable int userId)
+    {
+        List<Book> listenedBooks = userActivityRepository.findBooksListenedByUser(userId);
+
+        Set<Integer> listenedBooksId=new HashSet<>();
+        Set<String> authors=new HashSet<>();
+        Set<String> categories=new HashSet<>();
+
+        for(Book b:listenedBooks)
+        {
+            listenedBooksId.add(b.getBookId());
+            authors.add(b.getBookAuthor());
+            categories.add(b.getBookType());
+        }
+
+        List<Book> authorBased=new ArrayList<>();
+        List<Book> categoryBased=new ArrayList<>();
+        for(String author:authors)
+        {
+            List<Book> x= bookRepository.searchBooksByNameOrAuthor(author);
+            for(Book b:x)
+            {
+                authorBased.add(b);
+            }
+        }
+        for(String category: categories)
+        {
+            List<Book> y= bookRepository.getBookByType(category);
+            for(Book b:y)
+            {
+                categoryBased.add(b);
+            }
+        }
+        Set<Book> recommendationsSet = new HashSet<>();
+        for(Book book : authorBased) {
+            if (!listenedBooksId.contains(book.getBookId())) {
+                recommendationsSet.add(book);
+            }
+        }
+        for(Book book : categoryBased) {
+            if (!listenedBooksId.contains(book.getBookId())) {
+                recommendationsSet.add(book);
+            }
+        }
+        List<Book> recommendations = new ArrayList<>(recommendationsSet);
+        return ResponseEntity.ok(recommendations);
+    }
+
 }

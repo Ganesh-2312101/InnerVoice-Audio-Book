@@ -6,53 +6,7 @@
   <title>INNER VOICE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" type="image/png" href="tabicon.png">
-  <style>
-    /* @keyframes scrollBooks {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .scrolling-wrapper {
-      animation: scrollBooks 25s linear infinite;
-    } */
-    /* .scrolling-wrapper:hover {
-      animation-play-state: paused;
-    } */
-@keyframes fadeInBlur {
-  from {
-    opacity: 0;
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-body {
-  animation: fadeInBlur 3s ease forwards;
-}
-.wave {
-  background: url('wave.svg') repeat-x;
-  background-size: cover;
-  opacity: 0.5;
-}
-
-.wave1 {
-  animation: waveMove1 2s linear infinite;
-}
-.wave2 {
-  animation: waveMove2 4s linear infinite reverse;
-  opacity: 0.3;
-}
-@keyframes waveMove1 {
-  from { background-position-x: 0; }
-  to   { background-position-x: 1000px; }
-}
-
-@keyframes waveMove2 {
-  from { background-position-x: 0; }
-  to   { background-position-x: -1000px; }
-}
-  </style>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body class="bg-black text-red-500 font-sans">
 
@@ -202,25 +156,7 @@ body {
   </div>
 </footer>
 
-<script>
-  let currentSlide = 0;
-const slides = document.getElementById('slides');
-const totalSlides = 2; // Number of slide groups
-
-setInterval(() => {
-  currentSlide = (currentSlide + 1) % totalSlides;
-  slides.style.transform = `translateX(-${currentSlide * 100}%)`;
-}, 3000);
-
-  let currentSlide1 = 0;
-const slides1 = document.getElementById('mobileslides');
-const totalSlides1 = 8; // Number of slide groups
-
-setInterval(() => {
-  currentSlide1 = (currentSlide1 + 1) % totalSlides1;
-  slides1.style.transform = `translateX(-${currentSlide1 * 100}%)`;
-}, 3000);
-</script>
+<script src="index.js"></script>
 
 </body>
 </html>
