@@ -11,8 +11,12 @@
         const book = await response.json();
         const name = document.getElementById('bookTitle');
         const image= document.getElementById('image');
-        name.textContent = book.bookName; // Fixed extra closing brace
+        const audioElement = document.getElementById('audio');
+        name.textContent = book.bookName;
         image.src=book.imageLink;
+        if (book.audioFileLink) {
+          audioElement.src = book.audioFileLink;
+        }
       } else {
         console.error("Failed to fetch book data:", response.status);
       }

@@ -92,6 +92,7 @@ public class BookController {
             authors.add(b.getBookAuthor());
             categories.add(b.getBookType());
         }
+        
 
         List<Book> authorBased=new ArrayList<>();
         List<Book> categoryBased=new ArrayList<>();
