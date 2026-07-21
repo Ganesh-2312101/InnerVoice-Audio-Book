@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InnerVoice — Admin Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #e63946;
+      --red-dk: #b52232;
+      --bg:     #05070d;
+      --glass:  rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --text:   #e8eaf0;
+      --muted:  #6b7280;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background */
+    .bg-orbs {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 500px; height: 500px; background: rgba(230,57,70,0.15); top: -150px; left: -150px; animation-delay: 0s; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(230,57,70,0.08); bottom: -100px; right: -100px; animation-delay: 3s; }
+    .orb-3 { width: 300px; height: 300px; background: rgba(100,60,200,0.06); top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 6s; }
+
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(30px,20px) scale(1.05); }
+    }
+
+    /* Grid lines */
+    .grid-lines {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Card */
+    .card {
+      position: relative; z-index: 10;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 40px;
+      width: 420px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset;
+      animation: slideUp 0.6s cubic-bezier(.16,1,.3,1) both;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 32px;
+    }
+    .logo-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--red), var(--red-dk));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; box-shadow: 0 8px 24px rgba(230,57,70,0.4);
+    }
+    .logo-text { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+    .logo-text span { color: var(--red); }
+
+    .badge {
+      margin-left: auto;
+      background: rgba(230,57,70,0.12);
+      border: 1px solid rgba(230,57,70,0.3);
+      color: var(--red);
+      font-size: 10px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 13px; font-weight: 500; color: #9ca3af; margin-bottom: 8px; letter-spacing: 0.3px; }
+
+    .input-wrap {
+      position: relative;
+    }
+    .input-wrap .icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 16px; opacity: 0.5;
+    }
+    input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 14px 13px 42px;
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input:focus {
+      border-color: rgba(230,57,70,0.6);
+      background: rgba(255,255,255,0.07);
+      box-shadow: 0 0 0 3px rgba(230,57,70,0.12);
+    }
+    input::placeholder { color: var(--muted); }
+
+    .toggle-pass {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; opacity: 0.4; font-size: 14px;
+      transition: opacity 0.2s;
+    }
+    .toggle-pass:hover { opacity: 0.8; }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none; border-radius: 12px; cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px; font-weight: 600;
+      background: linear-gradient(135deg, var(--red), var(--red-dk));
+      color: #fff;
+      letter-spacing: 0.3px;
+      box-shadow: 0 8px 24px rgba(230,57,70,0.35);
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      margin-top: 8px;
+      position: relative; overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .btn:hover::after { opacity: 1; }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(230,57,70,0.45); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-text { display: inline-flex; align-items: center; gap: 8px; }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert {
+      padding: 12px 16px; border-radius: 10px;
+      font-size: 13px; margin-top: 16px;
+      display: none; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+    .alert-error { background: rgba(230,57,70,0.12); border: 1px solid rgba(230,57,70,0.3); color: #fca5a5; }
+    .alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #86efac; }
+
+    .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+    .footer-note {
+      text-align: center; font-size: 12px; color: var(--muted);
+    }
+    .footer-note a {
+      color: var(--red); text-decoration: none; font-weight: 500;
+    }
+    .footer-note a:hover { text-decoration: underline; }
+
+    /* Floating particles */
+    .particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+    .particle {
+      position: absolute; width: 2px; height: 2px; border-radius: 50%;
+      background: rgba(230,57,70,0.5);
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.5; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="grid-lines"></div>
+<div class="particles" id="particles"></div>
+
+<div class="card">
+  <div class="logo-row">
+    <div class="logo-icon">🎙️</div>
+    <div class="logo-text">Inner<span>Voice</span></div>
+    <div class="badge">Admin</div>
+  </div>
+
+  <h1>Welcome Back</h1>
+  <p class="subtitle">Sign in to access the admin panel</p>
+
+  <form id="loginForm" onsubmit="handleLogin(event)">
+    <div class="form-group">
+      <label for="adminName">Admin Username</label>
+      <div class="input-wrap">
+        <span class="icon">👤</span>
+        <input type="text" id="adminName" placeholder="superadmin" required autocomplete="username" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <span class="icon">🔒</span>
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" />
+        <span class="toggle-pass" id="togglePass" onclick="togglePassword()">👁️</span>
+      </div>
+    </div>
+
+    <button class="btn" type="submit" id="loginBtn">
+      <span class="btn-text">
+        <div class="spinner" id="spinner"></div>
+        <span id="btnLabel">Sign In to Admin Panel</span>
+      </span>
+    </button>
+
+    <div class="alert alert-error" id="errorAlert"></div>
+    <div class="alert alert-success" id="successAlert"></div>
+  </form>
+
+  <div class="divider"></div>
+
+  <div class="footer-note">
+    Not an admin? <a href="/home1.html">Go to Homepage</a>
+  </div>
+</div>
+
+<script>
+  // Generate floating particles
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.width = p.style.height = (Math.random() * 3 + 1) + 'px';
+    p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    pc.appendChild(p);
+  }
+
+  function togglePassword() {
+    const inp = document.getElementById('password');
+    const btn = document.getElementById('togglePass');
+    if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+    else { inp.type = 'password'; btn.textContent = '👁️'; }
+  }
+
+  function showAlert(type, msg) {
+    document.getElementById('errorAlert').style.display = 'none';
+    document.getElementById('successAlert').style.display = 'none';
+    const el = document.getElementById(type === 'error' ? 'errorAlert' : 'successAlert');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const adminName = document.getElementById('adminName').value.trim();
+    const password  = document.getElementById('password').value;
+    const btn       = document.getElementById('loginBtn');
+    const spinner   = document.getElementById('spinner');
+    const label     = document.getElementById('btnLabel');
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    label.textContent = 'Signing in…';
+
+    try {
+      const res = await fetch(
+        `/admin-panel/login?adminName=${encodeURIComponent(adminName)}&password=${encodeURIComponent(password)}`,
+        { method: 'POST' }
+      );
+      
+      let data;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        data = await res.text();
+      }
+
+      if (res.ok) {
+        // Handle case where successful login returns JSON object
+        const finalAdminName = data.adminName || adminName;
+        showAlert('success', `✅ Welcome back, ${finalAdminName}! Redirecting…`);
+        sessionStorage.setItem('adminId',   data.adminId || 1);
+        sessionStorage.setItem('adminName', finalAdminName);
+        sessionStorage.setItem('adminRole', data.role || 'SUPER_ADMIN');
+        setTimeout(() => window.location.href = '/admin-dashboard.html', 1200);
+      } else {
+        showAlert('error', '❌ ' + (typeof data === 'string' ? data : data.message || 'Login failed.'));
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        label.textContent = 'Sign In to Admin Panel';
+      }
+    } catch (err) {
+      console.error(err);
+      showAlert('error', '❌ Server error. Make sure the backend is running.');
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      label.textContent = 'Sign In to Admin Panel';
+    }
+  }
+</script>
+</body>
+</html>

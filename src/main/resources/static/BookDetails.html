@@ -43,6 +43,25 @@
     </div>
   </div>
 
+  <!-- AI Summary Section -->
+  <div class="mt-6 w-full text-left space-y-3 border-t border-gray-700 pt-4">
+    <h2 class="text-lg font-bold text-white">AI Book Summary ⭐⭐⭐⭐⭐</h2>
+    <p class="text-sm text-gray-400">Instead of reading long descriptions, let AI summarize it for you!</p>
+    
+    <div class="flex flex-col space-y-2">
+      <button onclick="generateSummary(50)" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition font-semibold">Generate 50-word summary</button>
+      <button onclick="generateSummary(100)" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition font-semibold">Generate 100-word summary</button>
+      <button onclick="generateSummary('keypoints')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition font-semibold">Generate Key Points</button>
+    </div>
+
+    <div id="summaryContainer" class="hidden mt-4 p-4 bg-gray-800 rounded-lg shadow-inner">
+      <h3 class="text-md font-bold text-yellow-400 mb-2">AI Generated Summary</h3>
+      <div id="summaryContent" class="text-gray-300 text-sm whitespace-pre-line leading-relaxed flex items-center justify-center min-h-[4rem]">
+        <!-- Summary text or loader goes here -->
+      </div>
+    </div>
+  </div>
+
 </div>
 </center>
 <audio id="audio" src="dummy.mp3"></audio>

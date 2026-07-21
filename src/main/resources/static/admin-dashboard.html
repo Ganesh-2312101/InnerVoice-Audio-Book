@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InnerVoice — Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:     #e63946;
+      --red-dk:  #b52232;
+      --red-glow: rgba(230,57,70,0.25);
+      --bg:      #06080f;
+      --surface: #0d1017;
+      --card:    rgba(255,255,255,0.04);
+      --border:  rgba(255,255,255,0.07);
+      --text:    #e8eaf0;
+      --muted:   #6b7280;
+      --green:   #22c55e;
+      --amber:   #f59e0b;
+      --blue:    #3b82f6;
+      --purple:  #a855f7;
+      --sidebar-w: 260px;
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      position: fixed; left: 0; top: 0; bottom: 0;
+      z-index: 100;
+      transition: transform 0.3s;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .logo-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--red), var(--red-dk));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+      box-shadow: 0 4px 16px var(--red-glow);
+    }
+    .logo-name { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-name span { color: var(--red); }
+    .logo-badge {
+      margin-left: auto;
+      background: rgba(230,57,70,0.15);
+      border: 1px solid rgba(230,57,70,0.3);
+      color: var(--red); font-size: 9px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 20px; flex-shrink: 0;
+    }
+
+    .sidebar-user {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 11px; color: var(--red); font-weight: 500; }
+
+    .nav-section {
+      padding: 20px 12px 8px;
+      font-size: 10px; font-weight: 600; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; margin: 2px 8px;
+      border-radius: 10px; cursor: pointer;
+      font-size: 14px; font-weight: 500; color: #9ca3af;
+      transition: all 0.2s; position: relative;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .nav-item.active {
+      background: rgba(230,57,70,0.12);
+      border: 1px solid rgba(230,57,70,0.2);
+      color: #fff;
+    }
+    .nav-item.active .nav-icon { color: var(--red); }
+    .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--red); color: #fff;
+      font-size: 10px; font-weight: 700;
+      padding: 1px 7px; border-radius: 20px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      height: 100vh;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(6,8,15,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .page-title { font-size: 20px; font-weight: 700; flex: 1; }
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn-refresh {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      color: var(--text); font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-refresh:hover { background: rgba(255,255,255,0.1); }
+
+    .btn-danger {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 8px;
+      background: rgba(230,57,70,0.12); border: 1px solid rgba(230,57,70,0.25);
+      color: var(--red); font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-danger:hover { background: rgba(230,57,70,0.2); }
+
+    /* ── CONTENT AREA ── */
+    .content { padding: 28px; }
+
+    /* ── STAT CARDS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px;
+      position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fadeUp 0.5s ease both;
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .stat-card:nth-child(1) { animation-delay: 0.05s; }
+    .stat-card:nth-child(2) { animation-delay: 0.10s; }
+    .stat-card:nth-child(3) { animation-delay: 0.15s; }
+    .stat-card:nth-child(4) { animation-delay: 0.20s; }
+    .stat-card:nth-child(5) { animation-delay: 0.25s; }
+    .stat-card:nth-child(6) { animation-delay: 0.30s; }
+
+    .stat-glow {
+      position: absolute; top: -30px; right: -30px;
+      width: 100px; height: 100px; border-radius: 50%;
+      filter: blur(30px); opacity: 0.25;
+    }
+
+    .stat-label {
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .stat-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+    .stat-value {
+      font-size: 36px; font-weight: 800; letter-spacing: -1px;
+      line-height: 1;
+    }
+    .stat-sub {
+      font-size: 12px; color: var(--muted); margin-top: 6px;
+    }
+    .stat-sub b { color: var(--green); }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .section-count {
+      background: rgba(255,255,255,0.08); border: 1px solid var(--border);
+      font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 20px;
+      color: var(--muted);
+    }
+
+    /* ── SEARCH / FILTER BAR ── */
+    .search-bar {
+      display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .search-input {
+      flex: 1; min-width: 200px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 10px; padding: 9px 14px;
+      color: var(--text); font-family: 'Outfit', sans-serif; font-size: 13px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: rgba(230,57,70,0.5); }
+    .search-input::placeholder { color: var(--muted); }
+    .filter-select {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 10px; padding: 9px 14px;
+      color: var(--text); font-family: 'Outfit', sans-serif; font-size: 13px;
+      outline: none; cursor: pointer;
+    }
+    .filter-select option { background: #0d1017; }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { border-bottom: 1px solid var(--border); }
+    th {
+      padding: 12px 16px; text-align: left;
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    td { padding: 12px 16px; font-size: 13px; vertical-align: middle; }
+
+    .avatar {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .user-cell { display: flex; align-items: center; gap: 10px; }
+    .user-cell-info .name { font-weight: 600; font-size: 13px; }
+    .user-cell-info .email { font-size: 11px; color: var(--muted); }
+
+    .badge-pill {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-premium { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+    .badge-free    { background: rgba(107,114,128,0.15); color: #9ca3af; border: 1px solid rgba(107,114,128,0.2); }
+    .badge-active  { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+    .badge-pending { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+    .badge-super   { background: rgba(168,85,247,0.12); color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
+
+    .action-btn {
+      padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      cursor: pointer; border: none; font-family: 'Outfit', sans-serif;
+      transition: all 0.2s;
+    }
+    .btn-promote { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+    .btn-promote:hover { background: rgba(34,197,94,0.25); }
+    .btn-delete  { background: rgba(230,57,70,0.12); color: #f87171; border: 1px solid rgba(230,57,70,0.25); }
+    .btn-delete:hover  { background: rgba(230,57,70,0.25); }
+    .btn-edit    { background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.25); }
+    .btn-edit:hover    { background: rgba(59,130,246,0.25); }
+    .btn-revoke  { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+    .btn-revoke:hover  { background: rgba(245,158,11,0.25); }
+
+    .actions-cell { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* ── PAGE SECTIONS ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── BOOK CARD GRID ── */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .book-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fadeUp 0.4s ease both;
+    }
+    .book-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+    .book-cover {
+      width: 100%; height: 180px; object-fit: cover;
+      background: rgba(255,255,255,0.05);
+    }
+    .book-info { padding: 12px; }
+    .book-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.3; }
+    .book-author { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+    .book-footer { display: flex; align-items: center; justify-content: space-between; }
+    .book-type { font-size: 10px; color: var(--muted); font-style: italic; }
+    .book-actions { display: flex; gap: 4px; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #0d1117; border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px; width: 480px; max-width: 95vw;
+      animation: slideUp 0.3s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .modal-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { margin-bottom: 16px; }
+    .form-field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+    .form-field input, .form-field select {
+      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px;
+      color: var(--text); font-family: 'Outfit', sans-serif; font-size: 13px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-field input:focus, .form-field select:focus { border-color: rgba(230,57,70,0.5); }
+    .form-field select option { background: #0d1117; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 8px; justify-content: flex-end; }
+    .modal-btn {
+      padding: 10px 20px; border-radius: 10px; font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 600; cursor: pointer; border: none;
+      transition: all 0.2s;
+    }
+    .modal-cancel { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text); }
+    .modal-cancel:hover { background: rgba(255,255,255,0.1); }
+    .modal-save { background: linear-gradient(135deg, var(--red), var(--red-dk)); color: #fff; }
+    .modal-save:hover { opacity: 0.9; }
+
+    /* ── TOAST ── */
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      background: #1a1d27; border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 18px;
+      font-size: 13px; font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+      min-width: 260px;
+    }
+    @keyframes toastIn  { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
+    @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateX(20px); } }
+    .toast-success { border-left: 3px solid var(--green); }
+    .toast-error   { border-left: 3px solid var(--red); }
+    .toast-info    { border-left: 3px solid var(--blue); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: var(--muted);
+    }
+    .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+    .empty-state p { font-size: 14px; }
+
+    /* ── LOADING ── */
+    .loading-row td {
+      text-align: center; padding: 48px; color: var(--muted);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: none; }
+      .main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🎙️</div>
+    <div class="logo-name">Inner<span>Voice</span></div>
+    <div class="logo-badge">Admin</div>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar" id="avatarInitial">S</div>
+    <div class="user-info">
+      <div class="user-name" id="sidebarName">superadmin</div>
+      <div class="user-role" id="sidebarRole">SUPER_ADMIN</div>
+    </div>
+  </div>
+
+  <div class="nav-section">Main</div>
+
+  <a class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard')">
+    <span class="nav-icon">📊</span> Dashboard
+  </a>
+  <a class="nav-item" id="nav-users" onclick="showPage('users')">
+    <span class="nav-icon">👥</span> Users
+    <span class="nav-badge" id="userCount">—</span>
+  </a>
+  <a class="nav-item" id="nav-books" onclick="showPage('books')">
+    <span class="nav-icon">📚</span> Books
+    <span class="nav-badge" id="bookCount">—</span>
+  </a>
+
+  <div class="nav-section">Tools</div>
+  <a class="nav-item" id="nav-admins" onclick="showPage('admins')">
+    <span class="nav-icon">🛡️</span> Admin Accounts
+  </a>
+  <a class="nav-item" id="nav-activity" onclick="showPage('activity')">
+    <span class="nav-icon">📈</span> Activity Log
+  </a>
+
+  <div class="sidebar-footer">
+    <a class="nav-item" onclick="logout()" style="color: #f87171;">
+      <span class="nav-icon">🚪</span> Logout
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="page-title" id="topbarTitle">Dashboard</div>
+    <div class="topbar-actions">
+      <button class="btn-refresh" onclick="refreshAll()">🔄 Refresh</button>
+      <button class="btn-danger" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ DASHBOARD PAGE ═══ -->
+    <div class="page active" id="page-dashboard">
+
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="stat-glow" style="background: #22c55e;"></div>
+          <div class="stat-label"><div class="stat-icon" style="background:rgba(34,197,94,0.12)">👥</div> Total Users</div>
+          <div class="stat-value" id="stat-totalUsers">—</div>
+          <div class="stat-sub" id="stat-userSub">Loading…</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-glow" style="background: #f59e0b;"></div>
+          <div class="stat-label"><div class="stat-icon" style="background:rgba(245,158,11,0.12)">⭐</div> Premium Users</div>
+          <div class="stat-value" style="color:#fbbf24" id="stat-premiumUsers">—</div>
+          <div class="stat-sub" id="stat-premiumSub">Loading…</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-glow" style="background: #3b82f6;"></div>
+          <div class="stat-label"><div class="stat-icon" style="background:rgba(59,130,246,0.12)">📚</div> Total Books</div>
+          <div class="stat-value" style="color:#93c5fd" id="stat-totalBooks">—</div>
+          <div class="stat-sub" id="stat-bookSub">Loading…</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-glow" style="background: #e63946;"></div>
+          <div class="stat-label"><div class="stat-icon" style="background:rgba(230,57,70,0.12)">📖</div> Premium Books</div>
+          <div class="stat-value" style="color:#f87171" id="stat-premiumBooks">—</div>
+          <div class="stat-sub" id="stat-premiumBookSub">Loading…</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-glow" style="background: #a855f7;"></div>
+          <div class="stat-label"><div class="stat-icon" style="background:rgba(168,85,247,0.12)">🛡️</div> Admins</div>
+          <div class="stat-value" style="color:#c084fc" id="stat-totalAdmins">—</div>
+          <div class="stat-sub" id="stat-adminSub">Loading…</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-glow" style="background: #22c55e;"></div>
+          <div class="stat-label"><div class="stat-icon" style="background:rgba(34,197,94,0.12)">📗</div> Free Books</div>
+          <div class="stat-value" style="color:#4ade80" id="stat-freeBooks">—</div>
+          <div class="stat-sub">Available to all users</div>
+        </div>
+      </div>
+
+      <!-- Quick overview table -->
+      <div class="section-header">
+        <div class="section-title">📋 Recent Users <span class="section-count" id="recentCount">0</span></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th><th>Category</th><th>Plan</th><th>Since</th>
+            </tr>
+          </thead>
+          <tbody id="recentUsersBody">
+            <tr class="loading-row"><td colspan="4">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ USERS PAGE ═══ -->
+    <div class="page" id="page-users">
+      <div class="section-header">
+        <div class="section-title">👥 User Management <span class="section-count" id="usersCount">0</span></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-refresh" onclick="loadUsers()">🔄 Refresh</button>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" id="userSearch" placeholder="🔍  Search by name or email…" oninput="filterUsers()" />
+        <select class="filter-select" id="userFilter" onchange="filterUsers()">
+          <option value="ALL">All Users</option>
+          <option value="PREMIUM_USER">Premium</option>
+          <option value="FREE_USER">Free</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th><th>Username</th><th>Category</th><th>Plan</th><th>Premium Since</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody">
+            <tr class="loading-row"><td colspan="6">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ BOOKS PAGE ═══ -->
+    <div class="page" id="page-books">
+      <div class="section-header">
+        <div class="section-title">📚 Book Management <span class="section-count" id="booksCount">0</span></div>
+        <button class="btn-refresh" style="background:rgba(230,57,70,0.12);border:1px solid rgba(230,57,70,0.25);color:var(--red);" onclick="openAddBook()">➕ Add Book</button>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" id="bookSearch" placeholder="🔍  Search books…" oninput="filterBooks()" />
+        <select class="filter-select" id="bookCatFilter" onchange="filterBooks()">
+          <option value="ALL">All Categories</option>
+          <option value="Free">Free</option>
+          <option value="Premium">Premium</option>
+        </select>
+        <select class="filter-select" id="bookTypeFilter" onchange="filterBooks()">
+          <option value="ALL">All Genres</option>
+          <option value="Novels">Novels</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Crime Thrillers">Crime Thrillers</option>
+          <option value="Productivity">Productivity</option>
+        </select>
+      </div>
+      <div class="books-grid" id="booksGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Loading books…</div>
+      </div>
+    </div>
+
+    <!-- ═══ ADMINS PAGE ═══ -->
+    <div class="page" id="page-admins">
+      <div class="section-header">
+        <div class="section-title">🛡️ Admin Accounts <span class="section-count" id="adminsCount">0</span></div>
+        <button class="btn-refresh" onclick="loadAdmins()">🔄 Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Admin Name</th><th>Email</th><th>Role</th><th>Status</th><th>Created</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="adminsBody">
+            <tr class="loading-row"><td colspan="7">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ ACTIVITY PAGE ═══ -->
+    <div class="page" id="page-activity">
+      <div class="section-header">
+        <div class="section-title">📈 Login Activity <span class="section-count" id="activityCount">0</span></div>
+        <button class="btn-refresh" onclick="loadActivity()">🔄 Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>User ID</th><th>Username</th><th>Login Time</th><th>Device / IP</th></tr>
+          </thead>
+          <tbody id="activityBody">
+            <tr class="loading-row"><td colspan="4">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ══ ADD / EDIT BOOK MODAL ══ -->
+<div class="modal-overlay" id="bookModal">
+  <div class="modal">
+    <div class="modal-title" id="bookModalTitle">Add New Book</div>
+    <div class="modal-subtitle">Fill in the book details below</div>
+    <div class="modal-row">
+      <div class="form-field">
+        <label>Book Name *</label>
+        <input type="text" id="bk-name" placeholder="e.g. The Alchemist" />
+      </div>
+      <div class="form-field">
+        <label>Author *</label>
+        <input type="text" id="bk-author" placeholder="e.g. Paulo Coelho" />
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="form-field">
+        <label>Category *</label>
+        <select id="bk-category">
+          <option>Free</option>
+          <option>Premium</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Genre *</label>
+        <select id="bk-type">
+          <option>Novels</option>
+          <option>Science Fiction</option>
+          <option>Crime Thrillers</option>
+          <option>Productivity</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Cover Image URL</label>
+      <input type="text" id="bk-image" placeholder="/images/cover_book.jpg" />
+    </div>
+    <div class="form-field">
+      <label>Audio File URL</label>
+      <input type="text" id="bk-audio" placeholder="/audio/audio_1_book.mp3" />
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-cancel" onclick="closeBookModal()">Cancel</button>
+      <button class="modal-btn modal-save" id="bookModalSave" onclick="saveBook()">💾 Save Book</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PREMIUM MODAL ══ -->
+<div class="modal-overlay" id="premiumModal">
+  <div class="modal">
+    <div class="modal-title">Approve Premium</div>
+    <div class="modal-subtitle" id="premiumModalSub">Select a plan for this user</div>
+    <div class="form-field">
+      <label>Premium Plan</label>
+      <select id="premiumPlan">
+        <option value="MONTHLY">Monthly</option>
+        <option value="YEARLY">Yearly</option>
+        <option value="LIFETIME">Lifetime</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-cancel" onclick="closePremiumModal()">Cancel</button>
+      <button class="modal-btn modal-save" onclick="confirmPremium()">✅ Approve Premium</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── Auth guard ───────────────────────────────────────────────────
+  let ADMIN_ID   = sessionStorage.getItem('adminId')   || 1;
+  let ADMIN_NAME = sessionStorage.getItem('adminName') || 'superadmin';
+  let ADMIN_ROLE = sessionStorage.getItem('adminRole') || 'SUPER_ADMIN';
+
+  document.getElementById('sidebarName').textContent   = ADMIN_NAME;
+  document.getElementById('sidebarRole').textContent   = ADMIN_ROLE;
+  document.getElementById('avatarInitial').textContent = ADMIN_NAME[0].toUpperCase();
+
+  // ─── Page routing ─────────────────────────────────────────────────
+  const pages = ['dashboard','users','books','admins','activity'];
+  const titles = { dashboard:'📊 Dashboard', users:'👥 User Management', books:'📚 Book Management', admins:'🛡️ Admin Accounts', activity:'📈 Activity Log' };
+
+  function showPage(page) {
+    pages.forEach(p => {
+      document.getElementById('page-' + p).classList.toggle('active', p === page);
+      document.getElementById('nav-' + p).classList.toggle('active', p === page);
+    });
+    document.getElementById('topbarTitle').textContent = titles[page];
+    if (page === 'users')    loadUsers();
+    if (page === 'books')    loadBooks();
+    if (page === 'admins')   loadAdmins();
+    if (page === 'activity') loadActivity();
+  }
+
+  // ─── Toast ────────────────────────────────────────────────────────
+  function toast(msg, type = 'info') {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.innerHTML = (type==='success'?'✅':type==='error'?'❌':'ℹ️') + ' ' + msg;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3200);
+  }
+
+  // ─── API helper ───────────────────────────────────────────────────
+  async function api(url, method = 'GET', body = null) {
+    const opts = { method, headers: { 'Content-Type': 'application/json' } };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(url, opts);
+    const data = await res.json().catch(() => ({}));
+    return { ok: res.ok, status: res.status, data };
+  }
+
+  // ─── DASHBOARD ────────────────────────────────────────────────────
+  async function loadDashboard() {
+    const r = await api(`/admin-panel/dashboard?adminId=${ADMIN_ID}`);
+    if (!r.ok) return;
+    const d = r.data;
+    document.getElementById('stat-totalUsers').textContent   = d.users.total;
+    document.getElementById('stat-premiumUsers').textContent = d.users.premium;
+    document.getElementById('stat-totalBooks').textContent   = d.books.total;
+    document.getElementById('stat-premiumBooks').textContent = d.books.premium;
+    document.getElementById('stat-totalAdmins').textContent  = d.admins.total;
+    document.getElementById('stat-freeBooks').textContent    = d.books.free;
+    document.getElementById('stat-userSub').innerHTML        = `<b>${d.users.premium}</b> premium &nbsp;•&nbsp; ${d.users.free} free`;
+    document.getElementById('stat-premiumSub').innerHTML     = `${d.users.free} free users`;
+    document.getElementById('stat-bookSub').innerHTML        = `<b>${d.books.premium}</b> premium &nbsp;•&nbsp; ${d.books.free} free`;
+    document.getElementById('stat-premiumBookSub').innerHTML = `${d.books.free} free books`;
+    document.getElementById('stat-adminSub').innerHTML       = `${d.admins.pending} pending approval`;
+    document.getElementById('userCount').textContent  = d.users.total;
+    document.getElementById('bookCount').textContent  = d.books.total;
+    document.getElementById('adminsCount').textContent = d.admins.total;
+  }
+
+  // ─── USERS ────────────────────────────────────────────────────────
+  let allUsers = [];
+  async function loadUsers() {
+    document.getElementById('usersBody').innerHTML = '<tr class="loading-row"><td colspan="6">Loading…</td></tr>';
+    const r = await api(`/admin-panel/users?adminId=${ADMIN_ID}`);
+    if (!r.ok) { toast('Failed to load users', 'error'); return; }
+    allUsers = r.data.value || [];
+    document.getElementById('usersCount').textContent = allUsers.length;
+    document.getElementById('userCount').textContent  = allUsers.length;
+    filterUsers();
+  }
+
+  function filterUsers() {
+    const q   = document.getElementById('userSearch').value.toLowerCase();
+    const cat = document.getElementById('userFilter').value;
+    const filtered = allUsers.filter(u =>
+      (cat === 'ALL' || u.userCategory === cat) &&
+      (u.name?.toLowerCase().includes(q) || u.emailId?.toLowerCase().includes(q) || u.userName?.toLowerCase().includes(q))
+    );
+    renderUsers(filtered);
+  }
+
+  const avatarColors = ['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#14b8a6','#f59e0b','#e63946'];
+  function getColor(name) { let h=0; for(let c of (name||'?')) h=(h+c.charCodeAt(0))%avatarColors.length; return avatarColors[h]; }
+
+  function renderUsers(users) {
+    const tbody = document.getElementById('usersBody');
+    if (!users.length) {
+      tbody.innerHTML = '<tr class="loading-row"><td colspan="6">No users found</td></tr>';
+      return;
+    }
+    tbody.innerHTML = users.map(u => `
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="avatar" style="background:${getColor(u.name)}">${(u.name||'?')[0].toUpperCase()}</div>
+            <div class="user-cell-info">
+              <div class="name">${u.name || '—'}</div>
+              <div class="email">${u.emailId || ''}</div>
+            </div>
+          </div>
+        </td>
+        <td>${u.userName || '—'}</td>
+        <td><span class="badge-pill ${u.userCategory === 'PREMIUM_USER' ? 'badge-premium' : 'badge-free'}">${u.userCategory === 'PREMIUM_USER' ? '⭐ Premium' : 'Free'}</span></td>
+        <td>${u.premiumPlan || '—'}</td>
+        <td>${u.premiumStartDate || '—'}</td>
+        <td>
+          <div class="actions-cell">
+            ${u.userCategory !== 'PREMIUM_USER'
+              ? `<button class="action-btn btn-promote" onclick="openPremiumModal(${u.userId},'${u.name}')">⭐ Premium</button>`
+              : `<button class="action-btn btn-revoke" onclick="revokePremium(${u.userId},'${u.name}')">↩ Revoke</button>`}
+            <button class="action-btn btn-delete" onclick="deleteUser(${u.userId},'${u.name}')">🗑 Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Premium actions
+  let premiumTargetId = null;
+  function openPremiumModal(userId, name) {
+    premiumTargetId = userId;
+    document.getElementById('premiumModalSub').textContent = `Select a plan for ${name}`;
+    document.getElementById('premiumModal').classList.add('open');
+  }
+  function closePremiumModal() { document.getElementById('premiumModal').classList.remove('open'); }
+  async function confirmPremium() {
+    const plan = document.getElementById('premiumPlan').value;
+    const r = await api(`/admin-panel/users/${premiumTargetId}/premium?adminId=${ADMIN_ID}&plan=${plan}`, 'PUT');
+    closePremiumModal();
+    toast(r.ok ? `✅ Premium approved!` : '❌ Failed to approve premium', r.ok ? 'success' : 'error');
+    if (r.ok) loadUsers();
+  }
+  async function revokePremium(userId, name) {
+    if (!confirm(`Revoke premium from ${name}?`)) return;
+    const r = await api(`/admin-panel/users/${userId}/premium?adminId=${ADMIN_ID}`, 'DELETE');
+    toast(r.ok ? `Premium revoked from ${name}` : '❌ Failed to revoke', r.ok ? 'success' : 'error');
+    if (r.ok) loadUsers();
+  }
+  async function deleteUser(userId, name) {
+    if (!confirm(`Delete user "${name}"? This cannot be undone.`)) return;
+    const r = await api(`/admin-panel/users/${userId}?adminId=${ADMIN_ID}`, 'DELETE');
+    toast(r.ok ? `User "${name}" deleted` : '❌ Failed to delete user', r.ok ? 'success' : 'error');
+    if (r.ok) { loadUsers(); loadDashboard(); }
+  }
+
+  // Recent users on dashboard
+  async function loadRecentUsers() {
+    const r = await api(`/admin-panel/users?adminId=${ADMIN_ID}`);
+    if (!r.ok) return;
+    const users = (r.data.value || []).slice(0, 5);
+    document.getElementById('recentCount').textContent = r.data.Count || 0;
+    document.getElementById('recentUsersBody').innerHTML = users.map(u => `
+      <tr>
+        <td><div class="user-cell">
+          <div class="avatar" style="background:${getColor(u.name)}">${(u.name||'?')[0].toUpperCase()}</div>
+          <div class="user-cell-info"><div class="name">${u.name}</div><div class="email">${u.emailId}</div></div>
+        </div></td>
+        <td><span class="badge-pill ${u.userCategory==='PREMIUM_USER'?'badge-premium':'badge-free'}">${u.userCategory==='PREMIUM_USER'?'⭐ Premium':'Free'}</span></td>
+        <td>${u.premiumPlan||'—'}</td>
+        <td>${u.premiumStartDate||'—'}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ─── BOOKS ────────────────────────────────────────────────────────
+  let allBooks = [];
+  async function loadBooks() {
+    document.getElementById('booksGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Loading books…</div>';
+    const r = await api(`/admin-panel/books?adminId=${ADMIN_ID}`);
+    if (!r.ok) { toast('Failed to load books', 'error'); return; }
+    allBooks = r.data.value || [];
+    document.getElementById('booksCount').textContent = allBooks.length;
+    document.getElementById('bookCount').textContent  = allBooks.length;
+    filterBooks();
+  }
+
+  function filterBooks() {
+    const q    = document.getElementById('bookSearch').value.toLowerCase();
+    const cat  = document.getElementById('bookCatFilter').value;
+    const type = document.getElementById('bookTypeFilter').value;
+    const filtered = allBooks.filter(b =>
+      (cat  === 'ALL' || b.bookCategory === cat) &&
+      (type === 'ALL' || b.bookType === type) &&
+      (b.bookName?.toLowerCase().includes(q) || b.bookAuthor?.toLowerCase().includes(q))
+    );
+    renderBooks(filtered);
+  }
+
+  function renderBooks(books) {
+    const g = document.getElementById('booksGrid');
+    if (!books.length) {
+      g.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">No books found</div>';
+      return;
+    }
+    g.innerHTML = books.map((b, i) => `
+      <div class="book-card" style="animation-delay:${i*0.03}s">
+        <img class="book-cover" src="${b.imageLink || '/default.webp'}" alt="${b.bookName}" onerror="this.src='/default.webp'" />
+        <div class="book-info">
+          <div class="book-name">${b.bookName}</div>
+          <div class="book-author">${b.bookAuthor || '—'}</div>
+          <div class="book-footer">
+            <span class="badge-pill ${b.bookCategory==='Premium'?'badge-premium':'badge-free'}">${b.bookCategory==='Premium'?'⭐ Premium':'Free'}</span>
+            <div class="book-actions">
+              <button class="action-btn btn-edit" onclick="openEditBook(${b.bookId})">✏️</button>
+              <button class="action-btn btn-delete" onclick="deleteBook(${b.bookId},'${b.bookName.replace(/'/g,"\\'")}')">🗑</button>
+            </div>
+          </div>
+          <div class="book-type" style="margin-top:4px">${b.bookType || ''}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Book modal
+  let editBookId = null;
+  function openAddBook() {
+    editBookId = null;
+    document.getElementById('bookModalTitle').textContent = 'Add New Book';
+    document.getElementById('bookModalSave').textContent  = '💾 Save Book';
+    ['bk-name','bk-author','bk-image','bk-audio'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('bk-category').value = 'Free';
+    document.getElementById('bk-type').value = 'Novels';
+    document.getElementById('bookModal').classList.add('open');
+  }
+  function openEditBook(bookId) {
+    const book = allBooks.find(b => b.bookId === bookId);
+    if (!book) return;
+    editBookId = bookId;
+    document.getElementById('bookModalTitle').textContent = 'Edit Book';
+    document.getElementById('bookModalSave').textContent  = '💾 Update Book';
+    document.getElementById('bk-name').value     = book.bookName || '';
+    document.getElementById('bk-author').value   = book.bookAuthor || '';
+    document.getElementById('bk-category').value = book.bookCategory || 'Free';
+    document.getElementById('bk-type').value     = book.bookType || 'Novels';
+    document.getElementById('bk-image').value    = book.imageLink || '';
+    document.getElementById('bk-audio').value    = book.audioFileLink || '';
+    document.getElementById('bookModal').classList.add('open');
+  }
+  function closeBookModal() { document.getElementById('bookModal').classList.remove('open'); }
+
+  async function saveBook() {
+    const body = {
+      bookName:      document.getElementById('bk-name').value.trim(),
+      bookAuthor:    document.getElementById('bk-author').value.trim(),
+      bookCategory:  document.getElementById('bk-category').value,
+      bookType:      document.getElementById('bk-type').value,
+      imageLink:     document.getElementById('bk-image').value.trim(),
+      audioFileLink: document.getElementById('bk-audio').value.trim()
+    };
+    if (!body.bookName) { toast('Book name is required', 'error'); return; }
+    const url    = editBookId ? `/admin-panel/books/${editBookId}?adminId=${ADMIN_ID}` : `/admin-panel/books?adminId=${ADMIN_ID}`;
+    const method = editBookId ? 'PUT' : 'POST';
+    const r = await api(url, method, body);
+    closeBookModal();
+    toast(r.ok ? (editBookId ? 'Book updated!' : 'Book added!') : '❌ Failed to save book', r.ok ? 'success' : 'error');
+    if (r.ok) { loadBooks(); loadDashboard(); }
+  }
+
+  async function deleteBook(bookId, name) {
+    if (!confirm(`Delete book "${name}"?`)) return;
+    const r = await api(`/admin-panel/books/${bookId}?adminId=${ADMIN_ID}`, 'DELETE');
+    toast(r.ok ? `"${name}" deleted` : '❌ Failed to delete', r.ok ? 'success' : 'error');
+    if (r.ok) { loadBooks(); loadDashboard(); }
+  }
+
+  // ─── ADMINS ───────────────────────────────────────────────────────
+  async function loadAdmins() {
+    document.getElementById('adminsBody').innerHTML = '<tr class="loading-row"><td colspan="7">Loading…</td></tr>';
+    const r = await api(`/admin-panel/all-admins?approverId=${ADMIN_ID}`);
+    if (!r.ok) { document.getElementById('adminsBody').innerHTML = '<tr class="loading-row"><td colspan="7">Access denied or no data</td></tr>'; return; }
+    const admins = Array.isArray(r.data) ? r.data : (r.data.admins || [r.data]);
+    document.getElementById('adminsCount').textContent = admins.length;
+    document.getElementById('adminsBody').innerHTML = admins.map(a => `
+      <tr>
+        <td>#${a.adminId}</td>
+        <td><b>${a.adminName}</b></td>
+        <td style="color:var(--muted)">${a.email}</td>
+        <td><span class="badge-pill ${a.role==='SUPER_ADMIN'?'badge-super':a.role==='ADMIN'?'badge-active':'badge-pending'}">${a.role}</span></td>
+        <td><span class="badge-pill ${a.approved?'badge-active':'badge-pending'}">${a.approved?'✅ Active':'⏳ Pending'}</span></td>
+        <td style="color:var(--muted)">${a.createdAt ? new Date(a.createdAt).toLocaleDateString() : '—'}</td>
+        <td>
+          <div class="actions-cell">
+            ${!a.approved ? `<button class="action-btn btn-promote" onclick="approveAdmin(${a.adminId})">✅ Approve</button>` : ''}
+            ${a.approved && a.role!=='SUPER_ADMIN' ? `<button class="action-btn btn-revoke" onclick="revokeAdmin(${a.adminId})">↩ Revoke</button>` : ''}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  async function approveAdmin(id) {
+    const r = await api(`/admin-panel/approve/${id}?approverId=${ADMIN_ID}`, 'PUT');
+    toast(r.ok ? 'Admin approved!' : '❌ Failed to approve', r.ok ? 'success' : 'error');
+    if (r.ok) loadAdmins();
+  }
+  async function revokeAdmin(id) {
+    if (!confirm('Revoke this admin access?')) return;
+    const r = await api(`/admin-panel/revoke/${id}?approverId=${ADMIN_ID}`, 'PUT');
+    toast(r.ok ? 'Admin revoked' : '❌ Failed to revoke', r.ok ? 'success' : 'error');
+    if (r.ok) loadAdmins();
+  }
+
+  // ─── ACTIVITY ─────────────────────────────────────────────────────
+  async function loadActivity() {
+    document.getElementById('activityBody').innerHTML = '<tr class="loading-row"><td colspan="4">Loading…</td></tr>';
+    const r = await api(`/admin-panel/login-history?adminId=${ADMIN_ID}`);
+    if (!r.ok) { document.getElementById('activityBody').innerHTML = '<tr class="loading-row"><td colspan="4">No data available</td></tr>'; return; }
+    const logs = Array.isArray(r.data) ? r.data : (r.data.value || r.data.history || []);
+    document.getElementById('activityCount').textContent = logs.length;
+    if (!logs.length) {
+      document.getElementById('activityBody').innerHTML = '<tr class="loading-row"><td colspan="4">No login history found</td></tr>';
+      return;
+    }
+    document.getElementById('activityBody').innerHTML = logs.slice().reverse().map(l => `
+      <tr>
+        <td>#${l.userId || l.id || '—'}</td>
+        <td><b>${l.userName || l.username || '—'}</b></td>
+        <td style="color:var(--muted)">${l.loginTime ? new Date(l.loginTime).toLocaleString() : l.timestamp || '—'}</td>
+        <td style="color:var(--muted)">${l.device || l.ipAddress || '—'}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ─── Refresh / Logout ─────────────────────────────────────────────
+  function refreshAll() {
+    loadDashboard(); loadRecentUsers();
+    toast('Data refreshed!', 'success');
+  }
+  function logout() {
+    sessionStorage.clear();
+    window.location.href = '/admin-login.html';
+  }
+
+  // ─── INIT ─────────────────────────────────────────────────────────
+  loadDashboard();
+  loadRecentUsers();
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InnerVoice Portal - All Links</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #e63946;
+      --red-dk: #b52232;
+      --bg: #05070d;
+      --card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --text: #e8eaf0;
+      --muted: #9ca3af;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    h1 span {
+      color: var(--red);
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+    }
+    .card h2 {
+      font-size: 20px;
+      margin-top: 0;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .link-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .link-item:hover {
+      background: rgba(230,57,70,0.1);
+      border-color: rgba(230,57,70,0.3);
+      transform: translateX(4px);
+    }
+    .link-name {
+      font-weight: 500;
+    }
+    .link-icon {
+      color: var(--red);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Inner<span>Voice</span> Portal</h1>
+    <p class="subtitle">All your project links in one place</p>
+
+    <div class="grid">
+      <!-- Public Pages -->
+      <div class="card">
+        <h2>🌐 Public Pages</h2>
+        <div class="links">
+          <a href="/index.html" class="link-item" target="_blank">
+            <span class="link-name">🏠 Landing Page</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/login.html" class="link-item" target="_blank">
+            <span class="link-name">🔑 User Login</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/signup.html" class="link-item" target="_blank">
+            <span class="link-name">📝 Sign Up</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/AboutUs.html" class="link-item" target="_blank">
+            <span class="link-name">ℹ️ About Us</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/Contact.html" class="link-item" target="_blank">
+            <span class="link-name">📞 Contact</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/Help And Support.html" class="link-item" target="_blank">
+            <span class="link-name">❓ Help & Support</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/privacy.html" class="link-item" target="_blank">
+            <span class="link-name">🔒 Privacy Policy</span>
+            <span class="link-icon">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Logged-in User Pages -->
+      <div class="card">
+        <h2>👤 User Dashboard (Requires Login)</h2>
+        <div class="links">
+          <a href="/home1.html?userId=2" class="link-item" target="_blank">
+            <span class="link-name">🎙️ Home (Logged In)</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/Profile.html" class="link-item" target="_blank">
+            <span class="link-name">👤 User Profile</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/Premium.html" class="link-item" target="_blank">
+            <span class="link-name">⭐ Premium Page</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/BookDetails.html" class="link-item" target="_blank">
+            <span class="link-name">📖 Book Details Example</span>
+            <span class="link-icon">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Admin Pages -->
+      <div class="card">
+        <h2>🛡️ Admin Panel</h2>
+        <div class="links">
+          <a href="/admin-login.html" class="link-item" target="_blank">
+            <span class="link-name">🔐 Admin Login</span>
+            <span class="link-icon">→</span>
+          </a>
+          <a href="/admin-dashboard.html" class="link-item" target="_blank">
+            <span class="link-name">📊 Admin Dashboard</span>
+            <span class="link-icon">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

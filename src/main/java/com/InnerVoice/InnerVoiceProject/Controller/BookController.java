@@ -65,6 +65,12 @@ public class BookController {
         return bookService.searchBooks(keyword);
     }
 
+    @PutMapping("/update-image-links")
+    public ResponseEntity<List<Book>> updateImageLinks() {
+        List<Book> updatedBooks = bookService.updateAllImageLinksToLocal();
+        return ResponseEntity.ok(updatedBooks);
+    }
+
     @PutMapping("/update-audio-links")
     public ResponseEntity<List<Book>> updateAudioLinks() {
         List<Book> updatedBooks = bookService.updateAllAudioLinksToStream();
@@ -125,6 +131,43 @@ public class BookController {
         }
         List<Book> recommendations = new ArrayList<>(recommendationsSet);
         return ResponseEntity.ok(recommendations);
+    }
+
+    @GetMapping("/summary/{id}")
+    public ResponseEntity<String> generateSummary(@PathVariable int id, @RequestParam String type) {
+        Optional<Book> bookOpt = bookService.getBookById(id);
+        if(bookOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Book not found for summary generation.");
+        }
+        Book book = bookOpt.get();
+        String title = book.getBookName();
+        String author = book.getBookAuthor();
+        String dummyContent = "";
+
+        if ("50".equals(type)) {
+            dummyContent = "<strong>50-Word Summary:</strong><br/>" + title + " by " + author + " is a compelling journey that captures the essence of its genre. Through well-developed characters and an engaging narrative, it explores profound themes that resonate deeply with readers. A must-read for fans seeking a thought-provoking, concise experience packed with emotion and insightful commentary on the human condition.";
+        } else if ("100".equals(type)) {
+            dummyContent = "<strong>100-Word Summary:</strong><br/>" + title + " by " + author + " presents an immersive world filled with complex characters and a gripping storyline. At its core, the narrative delves into the struggles of the protagonist against seemingly insurmountable odds, exploring themes of resilience, identity, and the power of choices. As the plot unfolds through unexpected twists and emotional depths, readers are drawn into a masterfully crafted universe. The rich descriptions and fast-paced events keep the audience on the edge of their seats, culminating in a satisfying yet thought-provoking conclusion that leaves a lasting impact long after the final page is turned.";
+        } else if ("keypoints".equals(type)) {
+            dummyContent = "<strong>Key Points:</strong><ul>" +
+                    "<li>📚 <strong>Engaging Narrative:</strong> The story of " + title + " keeps readers hooked from the very beginning.</li>" +
+                    "<li>👤 <strong>Character Growth:</strong> The protagonist undergoes significant development throughout the journey.</li>" +
+                    "<li>🌍 <strong>World Building:</strong> " + author + " creates a rich and vivid setting that brings the story to life.</li>" +
+                    "<li>💡 <strong>Thematic Depth:</strong> Explores universal themes such as resilience, identity, and hope.</li>" +
+                    "<li>🔥 <strong>Plot Twists:</strong> Several unexpected turns keep the plot fresh and exciting.</li>" +
+                    "</ul>";
+        } else {
+            return ResponseEntity.badRequest().body("Invalid summary type requested.");
+        }
+
+        // Simulate AI generation delay
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok(dummyContent);
     }
 
 }

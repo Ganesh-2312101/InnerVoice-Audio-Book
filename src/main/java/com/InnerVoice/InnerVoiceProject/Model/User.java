@@ -23,6 +23,8 @@ public class User {
 
     private LocalDate premiumStartDate;
 
+    private String profilePicture; // stores uploaded filename e.g. "avatar_3.jpg"
+
     public enum PremiumPlan{
         MONTHLY , YEARLY
     }

@@ -67,3 +67,31 @@ seekBar.addEventListener('click', function (e) {
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
+
+  async function generateSummary(type) {
+    const params = new URLSearchParams(window.location.search);
+    const bookId = params.get('bookId');
+    if (!bookId) {
+      alert("Book ID not found");
+      return;
+    }
+    
+    const summaryContainer = document.getElementById('summaryContainer');
+    const summaryContent = document.getElementById('summaryContent');
+    
+    summaryContainer.classList.remove('hidden');
+    summaryContent.innerHTML = `<span class="animate-pulse text-indigo-400">🤖 AI is generating summary...</span>`;
+
+    try {
+      const response = await fetch(`http://localhost:8080/books/summary/${bookId}?type=${type}`);
+      if (response.ok) {
+        const data = await response.text();
+        summaryContent.innerHTML = data;
+      } else {
+        summaryContent.innerHTML = `<span class="text-red-500">Failed to generate summary. Please try again later.</span>`;
+      }
+    } catch (error) {
+      console.error("Error generating summary:", error);
+      summaryContent.innerHTML = `<span class="text-red-500">An error occurred while communicating with the AI.</span>`;
+    }
+  }
