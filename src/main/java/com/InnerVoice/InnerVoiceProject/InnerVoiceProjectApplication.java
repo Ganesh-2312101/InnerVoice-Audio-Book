@@ -19,18 +19,26 @@ public class InnerVoiceProjectApplication {
 	public static void main(String[] args) {
 		String dbUrl = System.getenv("DATABASE_URL");
 		if (dbUrl != null && (dbUrl.startsWith("postgres://") || dbUrl.startsWith("postgresql://"))) {
-			String jdbcUrl = dbUrl.replaceFirst("^postgres(ql)?://", "jdbc:postgresql://");
-			System.setProperty("spring.datasource.url", jdbcUrl);
 			try {
 				java.net.URI uri = new java.net.URI(dbUrl);
+				String host = uri.getHost();
+				int port = uri.getPort() > 0 ? uri.getPort() : 5432;
+				String path = uri.getPath(); // e.g. /innervoice
+				String query = uri.getQuery(); // e.g. sslmode=require
+				String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + path;
+				if (query != null && !query.isEmpty()) {
+					jdbcUrl += "?" + query;
+				}
+				System.setProperty("spring.datasource.url", jdbcUrl);
 				String userInfo = uri.getUserInfo();
 				if (userInfo != null && userInfo.contains(":")) {
-					String[] parts = userInfo.split(":");
+					String[] parts = userInfo.split(":", 2);
 					String username = java.net.URLDecoder.decode(parts[0], "UTF-8");
 					String password = java.net.URLDecoder.decode(parts[1], "UTF-8");
 					System.setProperty("spring.datasource.username", username);
 					System.setProperty("spring.datasource.password", password);
 				}
+				System.out.println("Configured PostgreSQL: " + jdbcUrl);
 			} catch (Exception e) {
 				System.err.println("Failed to parse DATABASE_URL: " + e.getMessage());
 			}
