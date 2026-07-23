@@ -8,7 +8,7 @@ This project started as a simple landing page and eventually evolved into a full
 
 ## 🔗 Live Application Links
 
-* **🌐 Live Website Link:** [https://e7725f592f03fb.lhr.life/index.html](https://e7725f592f03fb.lhr.life/index.html)
+* **🌐 Live Website Link:** [https://e7725f592f03fb.lhr.life](https://e7725f592f03fb.lhr.life)
 * **🏠 Local Access Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
 
 ---
@@ -68,5 +68,5 @@ Run the application using the Maven wrapper:
 
 ### 4. Access the Web Application
 Visit the application homepage at:
-* **Public Link:** [https://e7725f592f03fb.lhr.life/index.html](https://e7725f592f03fb.lhr.life/index.html)
+* **Public Link:** [https://e7725f592f03fb.lhr.life](https://e7725f592f03fb.lhr.life)
 * **Local Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
