@@ -8,7 +8,7 @@ This project started as a simple landing page and eventually evolved into a full
 
 ## 🔗 Live Application Links
 
-* **🌐 Live Website Link:** [https://996486082740f319-157-51-35-128.serveousercontent.com](https://996486082740f319-157-51-35-128.serveousercontent.com)
+* **🌐 Live Website Link:** [https://brave-sides-wonder.loca.lt](https://brave-sides-wonder.loca.lt)
 * **🏠 Local Access Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
 
 ---
@@ -68,5 +68,5 @@ Run the application using the Maven wrapper:
 
 ### 4. Access the Web Application
 Visit the application homepage at:
-* **Public Link:** [https://996486082740f319-157-51-35-128.serveousercontent.com](https://996486082740f319-157-51-35-128.serveousercontent.com)
+* **Public Link:** [https://brave-sides-wonder.loca.lt](https://brave-sides-wonder.loca.lt)
 * **Local Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
