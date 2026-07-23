@@ -8,7 +8,7 @@ This project started as a simple landing page and eventually evolved into a full
 
 ## 🔗 Live Application Links
 
-* **🌐 Live Website Link:** [https://ab36b7e9bf2913.lhr.life/index.html](https://ab36b7e9bf2913.lhr.life/index.html)
+* **🌐 Live Website Link:** [https://innervoice-b3k7.onrender.com](https://innervoice-b3k7.onrender.com)
 * **🏠 Local Access Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
 
 ---
@@ -68,5 +68,5 @@ Run the application using the Maven wrapper:
 
 ### 4. Access the Web Application
 Visit the application homepage at:
-* **Public Link:** [https://ab36b7e9bf2913.lhr.life/index.html](https://ab36b7e9bf2913.lhr.life/index.html)
+* **Public Link:** [https://innervoice-b3k7.onrender.com](https://innervoice-b3k7.onrender.com)
 * **Local Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
