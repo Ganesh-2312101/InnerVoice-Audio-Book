@@ -1,10 +1,15 @@
-
-
 # InnerVoice — Audiobook Platform
 
 **InnerVoice** is a full-stack web application that allows users to browse and listen to audiobooks online. It is built using **Spring Boot (Java)** for the backend and **HTML, Tailwind CSS, and JavaScript** for the frontend.
 
-This project started as a simple landing page and eventually evolved into a fully functional audiobook platform. It offers a clean user interface, audio streaming, and a secure user system.
+This project started as a simple landing page and eventually evolved into a fully functional audiobook platform. It offers a clean, modern user interface, audio streaming, AI summaries, and a secure user system.
+
+---
+
+## 🔗 Live Application Links
+
+* **🌐 Live Website Link:** [https://6c13eac7c004b5.lhr.life/index.html](https://6c13eac7c004b5.lhr.life/index.html)
+* **🏠 Local Access Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
 
 ---
 
@@ -18,25 +23,18 @@ This project started as a simple landing page and eventually evolved into a full
 
 <img width="1920" height="1021" alt="Screenshot (49)" src="https://github.com/user-attachments/assets/bb7d27ab-24e6-484a-b607-65a9d701be23" />
 
-<img width="1920" height="1028" alt="Screenshot (51)" src="https://github.com/user-attachments/assets/255c3e37-0e69-4852-bbb2-9a41003ebce3" />
-
-<img width="1920" height="1028" alt="Screenshot (52)" src="https://github.com/user-attachments/assets/34a85664-83f1-4d83-b10b-ceee6d9d2838" />
-
-<img width="1920" height="1031" alt="Screenshot (53)" src="https://github.com/user-attachments/assets/aa937284-6616-4e55-bd1f-44b22f067a7d" />
-
-<img width="1920" height="1028" alt="Screenshot (50)" src="https://github.com/user-attachments/assets/7eef63d8-6bbb-4ee4-bee7-0e502d1c1664" />
-
-<img width="1920" height="1025" alt="Screenshot (56)" src="https://github.com/user-attachments/assets/b3c95654-aa9b-43a9-b210-739c01418a54" />
+---
 
 ## Features
 
 - User registration and login system
-- Audiobook browsing and playback
+- Modern dark-theme UI with glassmorphism & dynamic card hover effects
+- Instant search with dedicated top-shelf results
+- Audiobook browsing and audio streaming playback
+- AI-powered instant book summary generator
 - Support for premium and free books
 - Responsive design using Tailwind CSS
-- Audio file integration with HTML audio player
 - Backend powered by Spring Boot and MySQL
-- Clean and minimal user interface
 
 ---
 
@@ -54,38 +52,21 @@ This project started as a simple landing page and eventually evolved into a full
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/InnerVoice.git
-cd InnerVoice
+git clone https://github.com/Ganesh-2312101/InnerVoice-Audio-Book.git
+cd InnerVoice-Audio-Book
 ```
-2. Configure the Database
-Before launching the application, insert book records into the database manually.
-Each book entry must include:
 
-Book name
+### 2. Configure the Database
+Ensure MySQL is running on port 3306 and database settings in `src/main/resources/application.properties` are configured.
 
-Author
+### 3. Build and Run the Project
+Run the application using the Maven wrapper:
 
-Audio file name (e.g., dummy.mp3)
-
-Premium or free flag
-
-Ensure your database is running and the connection settings in application.properties are correct.
-
-3. Build and Run the Project
-Open the project in IntelliJ IDEA or any Java IDE, and run the application using:
-
+```bash
 ./mvnw spring-boot:run
+```
 
-5. Access the Web Application
-Visit the application at:
-
-http://localhost:8080
-
-Usage Instructions
-On first use, sign up using your email and password.
-
-After signing in, you can explore available audiobooks.
-
-Audio streaming is supported directly from the web interface.
-
-Premium content will be marked accordingly.
+### 4. Access the Web Application
+Visit the application homepage at:
+* **Public Link:** [https://6c13eac7c004b5.lhr.life/index.html](https://6c13eac7c004b5.lhr.life/index.html)
+* **Local Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
