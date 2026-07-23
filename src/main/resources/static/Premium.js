@@ -1,7 +1,7 @@
     async function UpgradePremium(plan){
       const params= new URLSearchParams(window.location.search);
-      const id = params.get('userId');
-      const response=await fetch(`http://localhost:8080/users/upgrade/${id}?plan=${plan}`,{
+      const id = params.get('userId') || localStorage.getItem('userId');
+      const response=await fetch(`/users/upgrade/${id}?plan=${plan}`,{
         method : 'PUT'
       });
       if(response.ok){

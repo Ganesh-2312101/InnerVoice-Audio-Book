@@ -3,7 +3,7 @@
     const bookId = params.get('bookId');
 
     try {
-      const response = await fetch(`http://localhost:8080/books/getting/${bookId}`, {
+      const response = await fetch(`/books/getting/${bookId}`, {
         method: "GET", // Change to POST only if your backend expects it
       });
 
@@ -83,7 +83,7 @@ seekBar.addEventListener('click', function (e) {
     summaryContent.innerHTML = `<span class="animate-pulse text-indigo-400">🤖 AI is generating summary...</span>`;
 
     try {
-      const response = await fetch(`http://localhost:8080/books/summary/${bookId}?type=${type}`);
+      const response = await fetch(`/books/summary/${bookId}?type=${type}`);
       if (response.ok) {
         const data = await response.text();
         summaryContent.innerHTML = data;

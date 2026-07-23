@@ -1,40 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>My Profile — InnerVoice</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/png" href="tabicon.png">
+    <link rel="stylesheet" href="home1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="text-red-500 bg-black font-sans">
-    <div class="bg-gray-900 p-[1%]">
-        <img src="Inner Voice Logo.png" alt="logo" class="w-40 rounded-full py-1">
-    </div>
-    <div id="ProfileInfo" class="mt-8">
-        <!-- Profile content will be injected here -->
-    </div>
+<body class="bg-[#0b0f17] text-gray-100 min-h-screen flex flex-col font-sans antialiased selection:bg-red-500 selection:text-white">
 
-    <div id="LoginHistorySection" class="mt-4 text-white">
-        <!-- Login history table will be injected here -->
-    </div>
+    <!-- Header -->
+    <header class="glass-nav sticky top-0 z-50 px-6 py-4 flex justify-between items-center shadow-xl">
+      <div class="flex items-center space-x-3">
+        <img src="Inner Voice Logo.png" alt="logo" class="w-9 h-9 rounded-xl">
+        <span class="text-xl font-extrabold text-white">Inner<span class="gradient-text-red">Voice</span></span>
+      </div>
 
-    <footer class="bg-black text-red-500 py-6 px-4 mt-8">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div class="text-center md:text-left">
-                <p class="font-semibold">© 2025 Inner Voice. All rights reserved.</p>
-            </div>
-            <div class="flex space-x-4">
-                <a href="AboutUs.html" class="hover:text-red-400 transition">About Us</a>
-                <a href="Contact.html" class="hover:text-red-400 transition">Contact</a>
-                <a href="privacy.html" class="hover:text-red-400 transition">Privacy Policy</a>
-            </div>
-        </div>
+      <button onclick="history.back()" class="flex items-center space-x-2 px-4 py-2 text-xs md:text-sm font-bold text-gray-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Back</span>
+      </button>
+    </header>
+
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
+      <div id="ProfileInfo"></div>
+      <div id="LoginHistorySection"></div>
+    </main>
+
+    <footer class="bg-slate-950 border-t border-slate-800 text-gray-400 py-8 px-6 text-center text-xs">
+        <p>© 2026 InnerVoice Audiobook Platform. All rights reserved.</p>
     </footer>
 
-
-    <script src="Profile.js">
-
-    </script>
+    <script src="Profile.js"></script>
 </body>
 </html>

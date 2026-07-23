@@ -1,8 +1,8 @@
 async function display() {
     const params = new URLSearchParams(window.location.search);
-    const userId = params.get('userId');
+    const userId = params.get('userId') || localStorage.getItem('userId');
 
-    const response = await fetch(`http://localhost:8080/users/${userId}`);
+    const response = await fetch(`/users/${userId}`);
 
     if (response.ok) {
         const user = await response.json();
@@ -10,7 +10,7 @@ async function display() {
         let premiumSection = '';
 
         if (user.userCategory === 'PREMIUM_USER' && user.premiumPlan) {
-            const daysLeftResponse = await fetch(`http://localhost:8080/users/premium-days-left/${userId}`);
+            const daysLeftResponse = await fetch(`/users/premium-days-left/${userId}`);
             let daysLeftText = '';
             if (daysLeftResponse.ok) {
                 daysLeftText = await daysLeftResponse.text();
@@ -119,7 +119,7 @@ async function display() {
             formData.append('file', selectedFile);
 
             try {
-                const res = await fetch(`http://localhost:8080/users/${userId}/profile-picture`, {
+                const res = await fetch(`/users/${userId}/profile-picture`, {
                     method: 'POST',
                     body: formData
                 });
@@ -179,11 +179,11 @@ function showToast(message, color = '#0CF574') {
 // ── Login History ───────────────────────────────────────────────────────────
 async function fetchLoginHistory() {
     const params = new URLSearchParams(window.location.search);
-    const userId = params.get('userId');
+    const userId = params.get('userId') || localStorage.getItem('userId');
     const container = document.getElementById('LoginHistorySection');
 
     try {
-        const response = await fetch(`http://localhost:8080/login-history/user/${userId}`);
+        const response = await fetch(`/login-history/user/${userId}`);
         if (!response.ok) {
             container.innerHTML = '<p class="text-center text-gray-400">Could not load login history.</p>';
             return;
