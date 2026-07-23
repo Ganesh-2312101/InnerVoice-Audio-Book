@@ -1,0 +1,25 @@
+services:
+  # Spring Boot Backend Web Service
+  - type: web
+    name: innervoice-web
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: MYSQL_URL
+        value: jdbc:mysql://innervoice-db:3306/innervoiceproject
+      - key: MYSQLUSER
+        value: root
+      - key: MYSQLPASSWORD
+        fromDatabase:
+          name: innervoice-db
+          property: password
+
+databases:
+  # MySQL Database Service
+  - name: innervoice-db
+    databaseName: innervoiceproject
+    user: root
+    plan: free
