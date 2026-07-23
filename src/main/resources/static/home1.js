@@ -52,7 +52,7 @@ function createBookCard(book) {
 
   card.innerHTML = `
     <div class="relative w-full aspect-[3/4] rounded-xl overflow-hidden mb-3 bg-slate-800">
-      <img src="${book.imageLink}" alt="${book.bookName}" referrerpolicy="no-referrer" crossorigin="anonymous" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='default.webp'">
+      <img src="${book.imageLink}" alt="${book.bookName}" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='default.webp'">
       <div class="absolute top-2 left-2 px-2.5 py-0.5 text-[10px] font-bold rounded-full ${badgeClass} shadow-md">
         ${badgeText}
       </div>
@@ -153,7 +153,7 @@ async function searchBooks() {
       } else {
         resultsDiv.innerHTML = books.map(book => `
           <div onclick="goToBook(${book.bookId})" class="flex items-center space-x-3 p-2.5 rounded-xl cursor-pointer hover:bg-slate-800 transition">
-            <img src="${book.imageLink}" referrerpolicy="no-referrer" crossorigin="anonymous" class="w-10 h-12 object-cover rounded-lg" onerror="this.src='default.webp'">
+            <img src="${book.imageLink}" referrerpolicy="no-referrer" class="w-10 h-12 object-cover rounded-lg" onerror="this.src='default.webp'">
             <div>
               <div class="text-sm font-semibold text-white">${book.bookName}</div>
               <div class="text-xs text-red-400 font-medium">${book.bookCategory}</div>

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 import com.InnerVoice.InnerVoiceProject.Repositories.BookRepository;
+import com.InnerVoice.InnerVoiceProject.Repositories.UserActivityRepository;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import javax.sql.DataSource;
@@ -90,11 +91,12 @@ public class InnerVoiceProjectApplication {
 	}
 
 	@Bean
-	public CommandLineRunner seedBooks(BookRepository bookRepository, DataSource dataSource) {
+	public CommandLineRunner seedBooks(BookRepository bookRepository, UserActivityRepository userActivityRepository, DataSource dataSource) {
 		return args -> {
 			log.info("[Book Seeder] Re-seeding books from books.sql to apply latest data...");
 			try {
-				// Always wipe and re-seed to ensure correct audio paths and image URLs
+				// Always wipe user activities first, then wipe books to avoid constraint violations
+				userActivityRepository.deleteAll();
 				bookRepository.deleteAll();
 				ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("books.sql"));
 				log.info("[Book Seeder] Books seeded successfully! Total: " + bookRepository.count());
