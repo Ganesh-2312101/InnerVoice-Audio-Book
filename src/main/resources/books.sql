@@ -1,4 +1,3 @@
-USE InnerVoiceProject;
 
 -- ======================== Productivity (25 books) ========================
 INSERT INTO book(book_author,book_name,book_category,book_type,image_link,audio_file_link) VALUES('James Clear','Atomic Habits','Premium','Productivity','https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg','audio1.mp3');

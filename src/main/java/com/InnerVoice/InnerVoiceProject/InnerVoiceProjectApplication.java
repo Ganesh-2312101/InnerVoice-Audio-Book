@@ -10,6 +10,10 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
+import com.InnerVoice.InnerVoiceProject.Repositories.BookRepository;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
+import javax.sql.DataSource;
 
 @SpringBootApplication
 public class InnerVoiceProjectApplication {
@@ -81,6 +85,23 @@ public class InnerVoiceProjectApplication {
 				log.info("========================================================");
 			} else {
 				log.info("[AdminPanel] SUPER_ADMIN already exists — skipping seed.");
+			}
+		};
+	}
+
+	@Bean
+	public CommandLineRunner seedBooks(BookRepository bookRepository, DataSource dataSource) {
+		return args -> {
+			if (bookRepository.count() == 0) {
+				log.info("[Book Seeder] No books found in database. Seeding books from books.sql...");
+				try {
+					ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("books.sql"));
+					log.info("[Book Seeder] Books seeded successfully!");
+				} catch (Exception e) {
+					log.severe("[Book Seeder] Failed to seed books: " + e.getMessage());
+				}
+			} else {
+				log.info("[Book Seeder] Books already exist in database — skipping seed.");
 			}
 		};
 	}
