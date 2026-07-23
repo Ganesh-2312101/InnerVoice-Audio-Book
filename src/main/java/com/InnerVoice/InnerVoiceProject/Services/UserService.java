@@ -79,8 +79,8 @@ public class UserService {
                 history.setUserId(user.getUserId());
                 history.setUserName(user.getUserName());
                 history.setLoginTime(LocalDateTime.now());
-                history.setIpAddress(ipAddress);
-                history.setDeviceName(deviceName);
+                history.setIpAddress(ipAddress != null && ipAddress.length() > 255 ? ipAddress.substring(0, 255) : ipAddress);
+                history.setDeviceName(deviceName != null && deviceName.length() > 255 ? deviceName.substring(0, 255) : deviceName);
                 loginHistoryRepository.save(history);
 
                 return ResponseEntity.ok(user);
