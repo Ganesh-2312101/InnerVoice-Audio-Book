@@ -773,7 +773,7 @@
     document.getElementById('usersBody').innerHTML = '<tr class="loading-row"><td colspan="6">Loading…</td></tr>';
     const r = await api(`/admin-panel/users?adminId=${ADMIN_ID}`);
     if (!r.ok) { toast('Failed to load users', 'error'); return; }
-    allUsers = r.data.value || [];
+    allUsers = Array.isArray(r.data) ? r.data : (r.data.value || []);
     document.getElementById('usersCount').textContent = allUsers.length;
     document.getElementById('userCount').textContent  = allUsers.length;
     filterUsers();
@@ -857,8 +857,9 @@
   async function loadRecentUsers() {
     const r = await api(`/admin-panel/users?adminId=${ADMIN_ID}`);
     if (!r.ok) return;
-    const users = (r.data.value || []).slice(0, 5);
-    document.getElementById('recentCount').textContent = r.data.Count || 0;
+    const usersList = Array.isArray(r.data) ? r.data : (r.data.value || []);
+    const users = usersList.slice(0, 5);
+    document.getElementById('recentCount').textContent = usersList.length;
     document.getElementById('recentUsersBody').innerHTML = users.map(u => `
       <tr>
         <td><div class="user-cell">
@@ -878,7 +879,7 @@
     document.getElementById('booksGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Loading books…</div>';
     const r = await api(`/admin-panel/books?adminId=${ADMIN_ID}`);
     if (!r.ok) { toast('Failed to load books', 'error'); return; }
-    allBooks = r.data.value || [];
+    allBooks = Array.isArray(r.data) ? r.data : (r.data.value || []);
     document.getElementById('booksCount').textContent = allBooks.length;
     document.getElementById('bookCount').textContent  = allBooks.length;
     filterBooks();
