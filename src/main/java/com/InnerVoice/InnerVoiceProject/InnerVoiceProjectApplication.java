@@ -18,16 +18,18 @@ public class InnerVoiceProjectApplication {
 
 	public static void main(String[] args) {
 		String dbUrl = System.getenv("DATABASE_URL");
-		if (dbUrl != null && dbUrl.startsWith("postgres://")) {
-			String jdbcUrl = dbUrl.replace("postgres://", "jdbc:postgresql://");
+		if (dbUrl != null && (dbUrl.startsWith("postgres://") || dbUrl.startsWith("postgresql://"))) {
+			String jdbcUrl = dbUrl.replaceFirst("^postgres(ql)?://", "jdbc:postgresql://");
 			System.setProperty("spring.datasource.url", jdbcUrl);
 			try {
 				java.net.URI uri = new java.net.URI(dbUrl);
 				String userInfo = uri.getUserInfo();
 				if (userInfo != null && userInfo.contains(":")) {
 					String[] parts = userInfo.split(":");
-					System.setProperty("spring.datasource.username", parts[0]);
-					System.setProperty("spring.datasource.password", parts[1]);
+					String username = java.net.URLDecoder.decode(parts[0], "UTF-8");
+					String password = java.net.URLDecoder.decode(parts[1], "UTF-8");
+					System.setProperty("spring.datasource.username", username);
+					System.setProperty("spring.datasource.password", password);
 				}
 			} catch (Exception e) {
 				System.err.println("Failed to parse DATABASE_URL: " + e.getMessage());
