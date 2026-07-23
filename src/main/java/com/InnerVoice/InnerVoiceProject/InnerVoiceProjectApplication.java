@@ -17,6 +17,22 @@ public class InnerVoiceProjectApplication {
 	private static final Logger log = Logger.getLogger(InnerVoiceProjectApplication.class.getName());
 
 	public static void main(String[] args) {
+		String dbUrl = System.getenv("DATABASE_URL");
+		if (dbUrl != null && dbUrl.startsWith("postgres://")) {
+			String jdbcUrl = dbUrl.replace("postgres://", "jdbc:postgresql://");
+			System.setProperty("spring.datasource.url", jdbcUrl);
+			try {
+				java.net.URI uri = new java.net.URI(dbUrl);
+				String userInfo = uri.getUserInfo();
+				if (userInfo != null && userInfo.contains(":")) {
+					String[] parts = userInfo.split(":");
+					System.setProperty("spring.datasource.username", parts[0]);
+					System.setProperty("spring.datasource.password", parts[1]);
+				}
+			} catch (Exception e) {
+				System.err.println("Failed to parse DATABASE_URL: " + e.getMessage());
+			}
+		}
 		SpringApplication.run(InnerVoiceProjectApplication.class, args);
 	}
 
