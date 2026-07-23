@@ -8,7 +8,7 @@ This project started as a simple landing page and eventually evolved into a full
 
 ## 🔗 Live Application Links
 
-* **🌐 Live Website Link:** [https://brave-sides-wonder.loca.lt](https://brave-sides-wonder.loca.lt)
+* **🌐 Live Website Link:** [https://innervoice-web.onrender.com](https://innervoice-web.onrender.com)
 * **🏠 Local Access Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
 
 ---
@@ -68,5 +68,5 @@ Run the application using the Maven wrapper:
 
 ### 4. Access the Web Application
 Visit the application homepage at:
-* **Public Link:** [https://brave-sides-wonder.loca.lt](https://brave-sides-wonder.loca.lt)
+* **Public Link:** [https://innervoice-web.onrender.com](https://innervoice-web.onrender.com)
 * **Local Link:** [http://localhost:8080/index.html](http://localhost:8080/index.html)
