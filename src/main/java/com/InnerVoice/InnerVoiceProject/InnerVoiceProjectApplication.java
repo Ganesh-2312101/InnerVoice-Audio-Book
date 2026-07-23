@@ -92,16 +92,14 @@ public class InnerVoiceProjectApplication {
 	@Bean
 	public CommandLineRunner seedBooks(BookRepository bookRepository, DataSource dataSource) {
 		return args -> {
-			if (bookRepository.count() == 0) {
-				log.info("[Book Seeder] No books found in database. Seeding books from books.sql...");
-				try {
-					ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("books.sql"));
-					log.info("[Book Seeder] Books seeded successfully!");
-				} catch (Exception e) {
-					log.severe("[Book Seeder] Failed to seed books: " + e.getMessage());
-				}
-			} else {
-				log.info("[Book Seeder] Books already exist in database — skipping seed.");
+			log.info("[Book Seeder] Re-seeding books from books.sql to apply latest data...");
+			try {
+				// Always wipe and re-seed to ensure correct audio paths and image URLs
+				bookRepository.deleteAll();
+				ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("books.sql"));
+				log.info("[Book Seeder] Books seeded successfully! Total: " + bookRepository.count());
+			} catch (Exception e) {
+				log.severe("[Book Seeder] Failed to seed books: " + e.getMessage());
 			}
 		};
 	}
