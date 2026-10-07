@@ -42,7 +42,7 @@ This project started as a simple landing page and eventually evolved into a full
 
 - **Backend:** Spring Boot, Java, JPA/Hibernate
 - **Frontend:** HTML, Tailwind CSS, JavaScript
-- **Database:** MySQL
+- **Database:** Mongo DB
 - **Build Tool:** Maven
 
 ---
